@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiFileIO", "MidiFileIO\MidiFileIO.csproj", "{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestDriver", "ConsoleTestDriver\ConsoleTestDriver.csproj", "{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4ED7DC4E-5A1E-48C5-AE07-2C53D8B7ECF8}
+	EndGlobalSection
+EndGlobal
