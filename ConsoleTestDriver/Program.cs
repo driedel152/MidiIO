@@ -12,13 +12,22 @@ namespace ConsoleTestDriver
             Console.WriteLine(midiFile.header.division);
             foreach (MidiEvent e in midiFile.tracks[0].events)
             {
-                if(e is NoteOnEvent)
+                if(e is ProgramChangeEvent)
                 {
-                    NoteOnEvent noteOn = e as NoteOnEvent;
-                    if(noteOn.channel == 1)
+                    ProgramChangeEvent programChange = e as ProgramChangeEvent;
+                    Console.WriteLine("Instrument: " + programChange.programName);
+                    foreach(MidiEvent e0 in midiFile.tracks[0].events)
                     {
-                        Console.WriteLine(noteOn.keyOn);
+                        if (e0 is NoteOnEvent)
+                        {
+                            NoteOnEvent noteOn = e0 as NoteOnEvent;
+                            if (noteOn.channel == programChange.channel)
+                            {
+                                Console.Write(noteOn.keyOn + " ");
+                            }
+                        }
                     }
+                    Console.WriteLine();
                 }
             }
         }

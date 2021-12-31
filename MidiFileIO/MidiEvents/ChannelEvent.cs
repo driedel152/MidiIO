@@ -181,12 +181,12 @@ namespace MidiFileIO
     public class ProgramChangeEvent : ChannelVoiceEvent
     {
         public int channel;
-        public int programNumber;
+        public ProgramName programName;
 
-        public ProgramChangeEvent(int channel, int programNumber)
+        public ProgramChangeEvent(int channel, ProgramName programName)
         {
             this.channel = channel;
-            this.programNumber = programNumber;
+            this.programName = programName;
         }
     }
 }

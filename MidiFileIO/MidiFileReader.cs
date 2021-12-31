@@ -213,8 +213,8 @@ namespace MidiFileIO
                             int keyPressure = ReadRawToInt(1);
                             return new PolyphonicKeyPressureEvent(channel, polyKey, keyPressure);
                         case 0xC:
-                            int programNumber = ReadRawToInt(1);
-                            return new ProgramChangeEvent(channel, programNumber);
+                            ProgramName programName = (ProgramName)ReadRawToInt(1);
+                            return new ProgramChangeEvent(channel, programName);
                         case 0xD:
                             int channelPressure = ReadRawToInt(1);
                             return new ChannelKeyPressureEvent(channel, channelPressure);
