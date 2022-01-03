@@ -56,7 +56,7 @@ namespace MidiFileIO
             while(index < endIndex)
             {
                 int deltaTime = ReadVariableLengthRawToInt();
-                MidiEvent trackEvent = ReadTrackEvent();
+                MidiEvent trackEvent = ReadMidiEvent();
                 deltaTimes.Add(deltaTime);
                 trackEvents.Add(trackEvent);
             }
@@ -69,7 +69,7 @@ namespace MidiFileIO
             return new Track(deltaTimes.ToArray(), trackEvents.ToArray());
         }
 
-        private MidiEvent ReadTrackEvent()
+        private MidiEvent ReadMidiEvent()
         {
             byte statusByte = raw[index++];
             int length;
