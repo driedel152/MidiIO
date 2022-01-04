@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace MidiFileIO
 {
-    public abstract class ChannelEvent : MidiEvent { }
+    public abstract class ChannelEvent : MidiEvent 
+    {
+        public int channel;
+    }
 
     public abstract class ChannelModeEvent : ChannelEvent { }
 
     public class AllNotesOffEvent : ChannelModeEvent
     {
-        public int channel;
-
         public AllNotesOffEvent(int channel)
         {
             this.channel = channel;
@@ -22,8 +23,6 @@ namespace MidiFileIO
 
     public class AllSoundOffEvent : ChannelModeEvent
     {
-        public int channel;
-
         public AllSoundOffEvent(int channel)
         {
             this.channel = channel;
@@ -32,7 +31,6 @@ namespace MidiFileIO
 
     public class LocalControlEvent : ChannelModeEvent
     {
-        public int channel;
         public bool connect;
 
         public LocalControlEvent(int channel, bool connect)
@@ -44,7 +42,6 @@ namespace MidiFileIO
 
     public class MonoModeOnEvent : ChannelModeEvent
     {
-        public int channel;
         public int numChannels;
 
         public MonoModeOnEvent(int channel, int numChannels)
@@ -56,8 +53,6 @@ namespace MidiFileIO
 
     public class OmniModeOffEvent : ChannelModeEvent
     {
-        public int channel;
-
         public OmniModeOffEvent(int channel)
         {
             this.channel = channel;
@@ -66,8 +61,6 @@ namespace MidiFileIO
 
     public class OmniModeOnEvent : ChannelModeEvent
     {
-        public int channel;
-
         public OmniModeOnEvent(int channel)
         {
             this.channel = channel;
@@ -76,8 +69,6 @@ namespace MidiFileIO
 
     public class PolyModeOnEvent : ChannelModeEvent
     {
-        public int channel;
-
         public PolyModeOnEvent(int channel)
         {
             this.channel = channel;
@@ -86,8 +77,6 @@ namespace MidiFileIO
 
     public class ResetAllControllersEvent : ChannelModeEvent
     {
-        public int channel;
-
         public ResetAllControllersEvent(int channel)
         {
             this.channel = channel;
@@ -98,7 +87,6 @@ namespace MidiFileIO
 
     public class ChannelKeyPressureEvent : ChannelVoiceEvent
     {
-        public int channel;
         public int channelPressure;
 
         public ChannelKeyPressureEvent(int channel, int channelPressure)
@@ -110,7 +98,6 @@ namespace MidiFileIO
 
     public class ControllerChangeEvent : ChannelVoiceEvent
     {
-        public int channel;
         public int controllerNumber;
         public int controllerValue;
 
@@ -124,7 +111,6 @@ namespace MidiFileIO
 
     public class NoteOffEvent : ChannelVoiceEvent
     {
-        public int channel;
         public int keyOff;
         public int velocityOff;
 
@@ -138,7 +124,6 @@ namespace MidiFileIO
 
     public class NoteOnEvent : ChannelVoiceEvent
     {
-        public int channel;
         public int keyOn;
         public int velocityOn;
 
@@ -152,7 +137,6 @@ namespace MidiFileIO
 
     public class PitchBendEvent : ChannelVoiceEvent
     {
-        public int channel;
         public int lsb;
         public int msb;
 
@@ -166,7 +150,6 @@ namespace MidiFileIO
 
     public class PolyphonicKeyPressureEvent : ChannelVoiceEvent
     {
-        public int channel;
         public int polyKey;
         public int keyPressure;
 
@@ -180,7 +163,6 @@ namespace MidiFileIO
 
     public class ProgramChangeEvent : ChannelVoiceEvent
     {
-        public int channel;
         public ProgramName programName;
 
         public ProgramChangeEvent(int channel, ProgramName programName)

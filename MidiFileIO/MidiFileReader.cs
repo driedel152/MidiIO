@@ -9,12 +9,6 @@ namespace MidiFileIO
 
     public class MidiFileReader
     {
-        const int CHUNK_TYPE_SIZE = 4;
-        const int CHUNK_LENGTH_SIZE = 4;
-        const int FORMAT_SIZE = 2;
-        const int TRACK_COUNT_SIZE = 2;
-        const int DIVISION_SIZE = 2;
-
         readonly byte[] raw;
         int index;
 
@@ -38,7 +32,7 @@ namespace MidiFileIO
 
         private Track ReadTrackChunk()
         {
-            string chunkType = ReadRawToAsciiString(CHUNK_LENGTH_SIZE);
+            string chunkType = ReadRawToAsciiString(4);
             if (chunkType != "MTrk")
             {
                 throw new InvalidDataException("Invalid track");
@@ -49,16 +43,15 @@ namespace MidiFileIO
 
         private Track ReadTrackData(int length)
         {
-            List<int> deltaTimes = new List<int>();
-            List<MidiEvent> trackEvents = new List<MidiEvent>();
+            List<MidiEvent> midiEvents = new List<MidiEvent>();
 
             int endIndex = index + length;
             while(index < endIndex)
             {
                 int deltaTime = ReadVariableLengthRawToInt();
-                MidiEvent trackEvent = ReadMidiEvent();
-                deltaTimes.Add(deltaTime);
-                trackEvents.Add(trackEvent);
+                MidiEvent midiEvent = ReadMidiEvent();
+                midiEvent.deltaTime = deltaTime;
+                midiEvents.Add(midiEvent);
             }
 
             if(index != endIndex)
@@ -66,7 +59,7 @@ namespace MidiFileIO
                 Console.WriteLine("Not sure if that should happen...");
             }
 
-            return new Track(deltaTimes.ToArray(), trackEvents.ToArray());
+            return new Track(midiEvents.ToArray());
         }
 
         private MidiEvent ReadMidiEvent()
@@ -76,11 +69,14 @@ namespace MidiFileIO
             switch (statusByte)
             {
                 // Sysex Events
-                case 0xF0: // TODO: differentiate between these two
-                case 0xF7:
+                case 0xF0: // TODO: differentiate between these 
                     length = ReadVariableLengthRawToInt();
                     byte[] sysexData = ReadRawToByteArr(length);
-                    return new SysexEvent(sysexData);
+                    return new SysexEvent(false, sysexData);
+                case 0xF7:
+                    length = ReadVariableLengthRawToInt();
+                    byte[] sysexEscapeData = ReadRawToByteArr(length);
+                    return new SysexEvent(true, sysexEscapeData);
                 // Meta Events
                 case 0xFF:
                     byte type = raw[index++];
@@ -134,7 +130,7 @@ namespace MidiFileIO
                         case 0x58:
                             Debug.Assert(length == 4);
                             int numerator = ReadRawToInt(1);
-                            int denominator = (int)Math.Pow(2, ReadRawToInt(1));
+                            int denominator = ReadRawToInt(1);
                             int clocksPerMetronomeTick = ReadRawToInt(1);
                             int thirtySecondNotesPerTwentyFourClocks = ReadRawToInt(1); // 8 is standard
                             return new TimeSignatureEvent(numerator, denominator, clocksPerMetronomeTick, thirtySecondNotesPerTwentyFourClocks);
@@ -144,7 +140,7 @@ namespace MidiFileIO
                             int majorMinor = ReadRawToInt(1); // TODO: make these enums
                             return new KeySignatureEvent(sharpsFlats, majorMinor);
                         case 0x7F:
-                            byte[] sequencerData = ReadRawToByteArr(length);
+                            byte[] sequencerData = ReadRawToByteArr(length); // TODO: read Manufacturer's ID
                             return new SequencerSpecificEvent(sequencerData);
                         default:
                             byte[] data = ReadRawToByteArr(length);
@@ -230,7 +226,7 @@ namespace MidiFileIO
 
         private MidiFileHeader ReadHeaderChunk()
         {
-            string chunkType = ReadRawToAsciiString(CHUNK_TYPE_SIZE);
+            string chunkType = ReadRawToAsciiString(4);
             if (chunkType != "MThd")
             {
                 throw new InvalidDataException("Invalid header");
@@ -248,20 +244,20 @@ namespace MidiFileIO
 
         private int ReadChunkLength()
         {
-            int length = ReadRawToInt(CHUNK_LENGTH_SIZE);
+            int length = ReadRawToInt(4);
             return length;
         }
 
         private MidiFileHeader ReadHeaderData(int length)
         {
-            MidiFileFormat format = (MidiFileFormat)ReadRawToInt(FORMAT_SIZE);
-            length -= FORMAT_SIZE;
+            MidiFileFormat format = (MidiFileFormat)ReadRawToInt(2);
+            length -= 2;
 
-            int trackCount = ReadRawToInt(TRACK_COUNT_SIZE);
-            length -= TRACK_COUNT_SIZE;
+            int trackCount = ReadRawToInt(2);
+            length -= 2;
 
-            int divisionRaw = ReadRawToInt(DIVISION_SIZE);
-            length -= DIVISION_SIZE;
+            int divisionRaw = ReadRawToInt(2);
+            length -= 2;
             Division division;
             if (divisionRaw >> 15 == 0)
             {

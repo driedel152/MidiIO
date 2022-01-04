@@ -8,12 +8,10 @@ namespace MidiFileIO
 {
     public class Track
     {
-        public int[] deltaTimes;
         public MidiEvent[] events;
 
-        public Track(int[] deltaTimes, MidiEvent[] events)
+        public Track(MidiEvent[] events)
         {
-            this.deltaTimes = deltaTimes;
             this.events = events;
         }
     }

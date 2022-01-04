@@ -3,7 +3,7 @@
     public class MidiFileHeader
     {
         public MidiFileFormat format;
-        public int trackCount;
+        internal int trackCount; // Used for reading, not writing
         public Division division;
         public byte[] ignoredData;
 

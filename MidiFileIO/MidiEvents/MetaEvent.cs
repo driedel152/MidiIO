@@ -143,6 +143,9 @@ namespace MidiFileIO
     public class TimeSignatureEvent : MetaEvent
     {
         public int numerator;
+        /// <summary>
+        /// Expressed as a power of 2.
+        /// </summary>
         public int denominator;
         public int clocksPerMetronomeTick;
         public int thirtySecondNotesPerTwentyFourClocks;
