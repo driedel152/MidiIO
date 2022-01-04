@@ -69,7 +69,7 @@ namespace MidiFileIO
             switch (statusByte)
             {
                 // Sysex Events
-                case 0xF0: // TODO: differentiate between these 
+                case 0xF0:
                     length = ReadVariableLengthRawToInt();
                     byte[] sysexData = ReadRawToByteArr(length);
                     return new SysexEvent(false, sysexData);
