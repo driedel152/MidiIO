@@ -35,15 +35,15 @@ namespace MidiFileIO
             // Chunk Type
             file.Write(Encoding.ASCII.GetBytes("MThd"));
             // Length
-            file.Write(BinaryUtils.IntToByteArr(6, 4));
+            file.Write(BinaryUtils.IntToByteArr(6, 4).ToArray());
             // Data
-            file.Write(BinaryUtils.IntToByteArr((int)midiFile.header.format, 2));
-            file.Write(BinaryUtils.IntToByteArr(midiFile.tracks.Length, 2));
+            file.Write(BinaryUtils.IntToByteArr((int)midiFile.header.format, 2).ToArray());
+            file.Write(BinaryUtils.IntToByteArr(midiFile.tracks.Length, 2).ToArray());
             byte[] divisionBytes;
             if (midiFile.header.division is DivisionPPQN) // TODO: Enforce maximum values
             {
                 DivisionPPQN division = (DivisionPPQN)midiFile.header.division;
-                divisionBytes = BinaryUtils.IntToByteArr(division.pulsesPerQuarterNote, 2);
+                divisionBytes = BinaryUtils.IntToByteArr(division.pulsesPerQuarterNote, 2).ToArray();
                 divisionBytes[0] &= 0x7F;
             }
             else
@@ -59,7 +59,7 @@ namespace MidiFileIO
             file.Write(Encoding.ASCII.GetBytes("MTrk"));
 
             byte[] trackData = TrackToByteArr(track);
-            file.Write(BinaryUtils.IntToByteArr(trackData.Length, 4));
+            file.Write(BinaryUtils.IntToByteArr(trackData.Length, 4).ToArray());
             file.Write(trackData);
         }
 
@@ -69,7 +69,7 @@ namespace MidiFileIO
             foreach (MidiEvent e in track.events)
             {
                 data.AddRange(BinaryUtils.IntToVariableByteArr(e.deltaTime));
-                data.AddRange(e.ToByteArray());
+                data.AddRange(e.ToBytes());
             }
             return data.ToArray();
         }

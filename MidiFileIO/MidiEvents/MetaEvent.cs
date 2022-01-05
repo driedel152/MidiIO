@@ -8,6 +8,45 @@ namespace MidiFileIO
 {
     public abstract class MetaEvent : MidiEvent { }
 
+    public class SequenceNumberEvent : MetaEvent
+    {
+        public int sequenceNumber;
+
+        public SequenceNumberEvent(int sequenceNumber)
+        {
+            this.sequenceNumber = sequenceNumber;
+        }
+
+        public override IEnumerable<byte> ToBytes()
+        {
+            yield return 0xFF;
+            yield return 0x00;
+            yield return 0x02;
+            foreach(byte b in BinaryUtils.IntToByteArr(sequenceNumber, 2))
+                yield return b;
+        }
+    }
+
+    public class TextEvent : MetaEvent
+    {
+        public byte[] text;
+
+        public TextEvent(byte[] text)
+        {
+            this.text = text;
+        }
+
+        public override IEnumerable<byte> ToBytes()
+        {
+            yield return 0xFF;
+            yield return 0x01;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(text.Length))
+                yield return b;
+            foreach (byte b in text)
+                yield return b;
+        }
+    }
+
     public class CopyrightNoticeEvent : MetaEvent
     {
         public string text;
@@ -17,42 +56,34 @@ namespace MidiFileIO
             this.text = text;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x02);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(text.Length));
-            bytes.AddRange(Encoding.ASCII.GetBytes(text));
-            return bytes.ToArray();
+            yield return 0xFF;
+            yield return 0x02;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(text.Length))
+                yield return b;
+            foreach (byte b in Encoding.ASCII.GetBytes(text))
+                yield return b;
         }
     }
 
-    public class CuePointEvent : MetaEvent
+    public class TrackNameEvent : MetaEvent
     {
-        public string cuePoint;
+        public string trackName;
 
-        public CuePointEvent(string cuePoint)
+        public TrackNameEvent(string trackName)
         {
-            this.cuePoint = cuePoint;
+            this.trackName = trackName;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x07);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(cuePoint.Length));
-            bytes.AddRange(Encoding.ASCII.GetBytes(cuePoint));
-            return bytes.ToArray();
-        }
-    }
-
-    public class EndOfTrackEvent : MetaEvent
-    {
-        public override byte[] ToByteArray()
-        {
-            return new byte[3] { 0xFF, 0x2F, 0x00 };
+            yield return 0xFF;
+            yield return 0x03;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(trackName.Length))
+                yield return b;
+            foreach (byte b in Encoding.ASCII.GetBytes(trackName))
+                yield return b;
         }
     }
 
@@ -65,37 +96,14 @@ namespace MidiFileIO
             this.instrumentName = instrumentName;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x04);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(instrumentName.Length));
-            bytes.AddRange(Encoding.ASCII.GetBytes(instrumentName));
-            return bytes.ToArray();
-        }
-    }
-
-    public class KeySignatureEvent : MetaEvent
-    {
-        public int sharpsFlats;
-        public int majorMinor;
-
-        public KeySignatureEvent(int sharpsFlats, int majorMinor)
-        {
-            this.sharpsFlats = sharpsFlats;
-            this.majorMinor = majorMinor;
-        }
-
-        public override byte[] ToByteArray()
-        {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x59);
-            bytes.Add(0x02);
-            bytes.AddRange(BinaryUtils.IntToByteArr(sharpsFlats, 1));
-            bytes.AddRange(BinaryUtils.IntToByteArr(majorMinor, 1));
-            return bytes.ToArray();
+            yield return 0xFF;
+            yield return 0x04;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(instrumentName.Length))
+                yield return b;
+            foreach (byte b in Encoding.ASCII.GetBytes(instrumentName))
+                yield return b;
         }
     }
 
@@ -108,14 +116,14 @@ namespace MidiFileIO
             this.lyric = lyric;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x05);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(lyric.Length));
-            bytes.AddRange(Encoding.ASCII.GetBytes(lyric));
-            return bytes.ToArray();
+            yield return 0xFF;
+            yield return 0x05;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(lyric.Length))
+                yield return b;
+            foreach (byte b in Encoding.ASCII.GetBytes(lyric))
+                yield return b;
         }
     }
 
@@ -128,14 +136,34 @@ namespace MidiFileIO
             this.marker = marker;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x06);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(marker.Length));
-            bytes.AddRange(Encoding.ASCII.GetBytes(marker));
-            return bytes.ToArray();
+            yield return 0xFF;
+            yield return 0x06;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(marker.Length))
+                yield return b;
+            foreach (byte b in Encoding.ASCII.GetBytes(marker))
+                yield return b;
+        }
+    }
+
+    public class CuePointEvent : MetaEvent
+    {
+        public string cuePoint;
+
+        public CuePointEvent(string cuePoint)
+        {
+            this.cuePoint = cuePoint;
+        }
+
+        public override IEnumerable<byte> ToBytes()
+        {
+            yield return 0xFF;
+            yield return 0x07;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(cuePoint.Length))
+                yield return b;
+            foreach (byte b in Encoding.ASCII.GetBytes(cuePoint))
+                yield return b;
         }
     }
 
@@ -148,49 +176,17 @@ namespace MidiFileIO
             this.channel = channel;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            return new byte[] { 0xFF, 0x20, 0x01, BinaryUtils.IntToByteArr(channel, 1)[0] };
+            return new byte[] { 0xFF, 0x20, 0x01, (byte)channel };
         }
     }
 
-    public class SequenceNumberEvent : MetaEvent
+    public class EndOfTrackEvent : MetaEvent
     {
-        public int sequenceNumber;
-
-        public SequenceNumberEvent(int sequenceNumber)
+        public override IEnumerable<byte> ToBytes()
         {
-            this.sequenceNumber = sequenceNumber;
-        }
-
-        public override byte[] ToByteArray()
-        {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x00);
-            bytes.Add(0x02);
-            bytes.AddRange(BinaryUtils.IntToByteArr(sequenceNumber, 2));
-            return bytes.ToArray();
-        }
-    }
-
-    public class SequencerSpecificEvent : MetaEvent
-    {
-        public byte[] sequencerData;
-
-        public SequencerSpecificEvent(byte[] sequencerData)
-        {
-            this.sequencerData = sequencerData;
-        }
-
-        public override byte[] ToByteArray()
-        {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x7F);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(sequencerData.Length));
-            bytes.AddRange(sequencerData);
-            return bytes.ToArray();
+            return new byte[] { 0xFF, 0x2F, 0x00 };
         }
     }
 
@@ -203,14 +199,13 @@ namespace MidiFileIO
             this.tempo = tempo;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x51);
-            bytes.Add(0x03);
-            bytes.AddRange(BinaryUtils.IntToByteArr(tempo, 3));
-            return bytes.ToArray();
+            yield return 0xFF;
+            yield return 0x51;
+            yield return 0x03;
+            foreach (byte b in BinaryUtils.IntToByteArr(tempo, 3))
+                yield return b;
         }
     }
 
@@ -231,37 +226,9 @@ namespace MidiFileIO
             this.fractionalFrame = fractionalFrame;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            return new byte[]
-            {
-                0xFF, 0x54, 0x05,
-                (byte)hours,
-                (byte)minutes,
-                (byte)seconds,
-                (byte)frames,
-                (byte)fractionalFrame
-            };
-        }
-    }
-
-    public class TextEvent : MetaEvent
-    {
-        public byte[] text;
-
-        public TextEvent(byte[] text)
-        {
-            this.text = text;
-        }
-
-        public override byte[] ToByteArray()
-        {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x01);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(text.Length));
-            bytes.AddRange(text);
-            return bytes.ToArray();
+            return new byte[] { 0xFF, 0x54, 0x05, (byte)hours, (byte)minutes, (byte)seconds, (byte)frames, (byte)fractionalFrame };
         }
     }
 
@@ -283,37 +250,46 @@ namespace MidiFileIO
             this.thirtySecondNotesPerTwentyFourClocks = thirtySecondNotesPerTwentyFourClocks;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x58);
-            bytes.Add(0x04);
-            bytes.AddRange(BinaryUtils.IntToByteArr(numerator, 1));
-            bytes.AddRange(BinaryUtils.IntToByteArr(denominator, 1));
-            bytes.AddRange(BinaryUtils.IntToByteArr(clocksPerMetronomeTick, 1));
-            bytes.AddRange(BinaryUtils.IntToByteArr(thirtySecondNotesPerTwentyFourClocks, 1));
-            return bytes.ToArray();
+            return new byte[] { 0xFF, 0x58, 0x04, (byte)numerator, (byte)denominator, (byte)clocksPerMetronomeTick, (byte)thirtySecondNotesPerTwentyFourClocks };
         }
     }
 
-    public class TrackNameEvent : MetaEvent
+    public class KeySignatureEvent : MetaEvent
     {
-        public string trackName;
+        public int sharpsFlats;
+        public int majorMinor;
 
-        public TrackNameEvent(string trackName)
+        public KeySignatureEvent(int sharpsFlats, int majorMinor)
         {
-            this.trackName = trackName;
+            this.sharpsFlats = sharpsFlats;
+            this.majorMinor = majorMinor;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add(0xFF);
-            bytes.Add(0x03);
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(trackName.Length));
-            bytes.AddRange(Encoding.ASCII.GetBytes(trackName));
-            return bytes.ToArray();
+            return new byte[] { 0xFF, 0x59, 0x02, (byte)sharpsFlats, (byte)majorMinor };
+        }
+    }
+
+    public class SequencerSpecificEvent : MetaEvent
+    {
+        public byte[] sequencerData;
+
+        public SequencerSpecificEvent(byte[] sequencerData)
+        {
+            this.sequencerData = sequencerData;
+        }
+
+        public override IEnumerable<byte> ToBytes()
+        {
+            yield return 0xFF;
+            yield return 0x7F;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(sequencerData.Length))
+                yield return b;
+            foreach (byte b in sequencerData)
+                yield return b;
         }
     }
 }

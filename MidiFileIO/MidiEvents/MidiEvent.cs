@@ -8,7 +8,7 @@ namespace MidiFileIO
     {
         public int deltaTime = 0;
         
-        public abstract IEnumerable<byte> ToByteArray();
+        public abstract IEnumerable<byte> ToBytes();
 
         public static MidiEvent Parse(byte[] raw, ref int index)
         {

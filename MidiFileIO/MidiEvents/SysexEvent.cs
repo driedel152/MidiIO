@@ -13,13 +13,13 @@ namespace MidiFileIO
             this.data = data;
         }
 
-        public override byte[] ToByteArray()
+        public override IEnumerable<byte> ToBytes()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.Add((byte)(isEscape ? 0xF7 : 0xF0));
-            bytes.AddRange(BinaryUtils.IntToVariableByteArr(data.Length));
-            bytes.AddRange(data);
-            return bytes.ToArray();
+            yield return (byte)(isEscape ? 0xF7 : 0xF0);
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(data.Length))
+                yield return b;
+            foreach (byte b in data)
+                yield return b;
         }
     }
 }

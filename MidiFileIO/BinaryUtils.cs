@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace MidiFileIO
     {
         public static string ReadRawToAsciiString(byte[] raw, ref int index, int length)
         {
-            string chunkType = System.Text.Encoding.ASCII.GetString(raw, index, length);
+            string chunkType = Encoding.ASCII.GetString(raw, index, length);
             index += length;
             return chunkType;
         }
@@ -51,7 +50,7 @@ namespace MidiFileIO
             return value;
         }
 
-        public static IEnumerable<byte> IntToVariableByteArr(int integer)
+        public static byte[] IntToVariableByteArr(int integer)
         {
             if (integer > Math.Pow(2, 28)) throw new OverflowException("Integer value too large");
 
