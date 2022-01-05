@@ -57,17 +57,38 @@ namespace MidiFileIO
 
             if (integer >= Math.Pow(2, 21))
             {
-                yield return (byte)(0x80 | (integer >> 21));
+                return new byte[4]
+                {
+                    (byte)(0x80 | (integer >> 21)),
+                    (byte)(0x80 | (integer >> 14)),
+                    (byte)(0x80 | (integer >> 7)),
+                    (byte)(0x7F & integer)
+                };
             }
-            if (integer >= Math.Pow(2, 14))
+            else if (integer >= Math.Pow(2, 14))
             {
-                yield return (byte)(0x80 | (integer >> 14));
+                return new byte[3]
+                {
+                    (byte)(0x80 | (integer >> 14)),
+                    (byte)(0x80 | (integer >> 7)),
+                    (byte)(0x7F & integer)
+                };
             }
-            if (integer >= Math.Pow(2, 7))
+            else if (integer >= Math.Pow(2, 7))
             {
-                yield return (byte)(0x80 | (integer >> 7));
+                return new byte[2]
+                {
+                    (byte)(0x80 | (integer >> 7)),
+                    (byte)(0x7F & integer)
+                };
             }
-            yield return (byte)(0x7F & integer);
+            else
+            {
+                return new byte[1]
+                {
+                    (byte)(0x7F & integer)
+                };
+            }
         }
 
         public static IEnumerable<byte> IntToByteArr(int value, int length)
@@ -77,9 +98,10 @@ namespace MidiFileIO
             int shiftIndex = length;
             while (index < length)
             {
-                yield return (byte)(value >> (--shiftIndex * 8));
+                bytes[index] = (byte)(value >> (--shiftIndex * 8));
                 index++;
             }
+            return bytes;
         }
     }
 }

@@ -28,9 +28,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0x80 | channel);
-            yield return (byte)keyOff;
-            yield return (byte)velocityOff;
+            return new byte[] { (byte)(0x80 | channel), (byte)keyOff, (byte)velocityOff };
         }
     }
 
@@ -48,9 +46,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0x90 | channel);
-            yield return (byte)keyOn;
-            yield return (byte)velocityOn;
+            return new byte[] { (byte)(0x90 | channel), (byte)keyOn, (byte)velocityOn };
         }
     }
 
@@ -68,9 +64,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xA0 | channel);
-            yield return (byte)polyKey;
-            yield return (byte)keyPressure;
+            return new byte[] { (byte)(0xA0 | channel), (byte)polyKey, (byte)keyPressure };
         }
     }
 
@@ -88,9 +82,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return (byte)controllerNumber;
-            yield return (byte)controllerValue;
+            return new byte[] { (byte)(0xB0 | channel), (byte)controllerNumber, (byte)controllerValue };
         }
     }
 
@@ -106,8 +98,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xC0 | channel);
-            yield return (byte)programName;
+            return new byte[] { (byte)(0xC0 | channel), (byte)programName };
         }
     }
 
@@ -123,8 +114,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xD0 | channel);
-            yield return (byte)channelPressure;
+            return new byte[] { (byte)(0xD0 | channel), (byte)channelPressure };
         }
     }
 
@@ -142,9 +132,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xE0 | channel);
-            yield return (byte)lsb;
-            yield return (byte)msb;
+            return new byte[] { (byte)(0xE0 | channel), (byte)lsb, (byte)msb };
         }
     }
     #endregion
@@ -161,9 +149,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x78;
-            yield return 0x00;
+            return new byte[] { (byte)(0xB0 | channel), 0x78, 0x00 };
         }
     }
 
@@ -176,9 +162,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x79;
-            yield return 0x00;
+            return new byte[] { (byte)(0xB0 | channel), 0x79, 0x00 };
         }
     }
 
@@ -194,9 +178,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x7A;
-            yield return (byte)(connect ? 0x7F : 0x00);
+            return new byte[] { (byte)(0xB0 | channel), 0x7A, (byte)(connect ? 0x7F : 0x00) };
         }
     }
 
@@ -209,9 +191,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x7B;
-            yield return 0x00;
+            return new byte[] { (byte)(0xB0 | channel), 0x7B, 0x00 };
         }
     }
 
@@ -224,9 +204,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x7C;
-            yield return 0x00;
+            return new byte[] { (byte)(0xB0 | channel), 0x7C, 0x00 };
         }
     }
 
@@ -239,9 +217,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x7D;
-            yield return 0x00;
+            return new byte[] { (byte)(0xB0 | channel), 0x7D, 0x00 };
         }
     }
 
@@ -257,9 +233,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x7E;
-            yield return (byte)numChannels;
+            return new byte[] { (byte)(0xB0 | channel), 0x7E, (byte)numChannels };
         }
     }
 
@@ -272,9 +246,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return (byte)(0xB0 | channel);
-            yield return 0x7F;
-            yield return 0x00;
+            return new byte[] { (byte)(0xB0 | channel), 0x7F, 0x00 };
         }
     }
     #endregion

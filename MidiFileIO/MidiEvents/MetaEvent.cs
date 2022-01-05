@@ -178,10 +178,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return 0xFF;
-            yield return 0x20;
-            yield return 0x01;
-            yield return (byte)channel;
+            return new byte[] { 0xFF, 0x20, 0x01, (byte)channel };
         }
     }
 
@@ -189,9 +186,7 @@ namespace MidiFileIO
     {
         public override IEnumerable<byte> ToBytes()
         {
-            yield return 0xFF;
-            yield return 0x2F;
-            yield return 0x00;
+            return new byte[] { 0xFF, 0x2F, 0x00 };
         }
     }
 
@@ -233,14 +228,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return 0xFF;
-            yield return 0x54;
-            yield return 0x05;
-            yield return (byte)hours;
-            yield return (byte)minutes;
-            yield return (byte)seconds;
-            yield return (byte)frames;
-            yield return (byte)fractionalFrame;
+            return new byte[] { 0xFF, 0x54, 0x05, (byte)hours, (byte)minutes, (byte)seconds, (byte)frames, (byte)fractionalFrame };
         }
     }
 
@@ -264,13 +252,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return 0xFF;
-            yield return 0x58;
-            yield return 0x04;
-            yield return (byte)numerator;
-            yield return (byte)denominator;
-            yield return (byte)clocksPerMetronomeTick;
-            yield return (byte)thirtySecondNotesPerTwentyFourClocks;
+            return new byte[] { 0xFF, 0x58, 0x04, (byte)numerator, (byte)denominator, (byte)clocksPerMetronomeTick, (byte)thirtySecondNotesPerTwentyFourClocks };
         }
     }
 
@@ -287,11 +269,7 @@ namespace MidiFileIO
 
         public override IEnumerable<byte> ToBytes()
         {
-            yield return 0xFF;
-            yield return 0x59;
-            yield return 0x02;
-            yield return (byte)sharpsFlats;
-            yield return (byte)majorMinor;
+            return new byte[] { 0xFF, 0x59, 0x02, (byte)sharpsFlats, (byte)majorMinor };
         }
     }
 
