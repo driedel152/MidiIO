@@ -16,6 +16,16 @@ namespace MidiFileIO
         {
             this.text = text;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x02);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(text.Length));
+            bytes.AddRange(Encoding.ASCII.GetBytes(text));
+            return bytes.ToArray();
+        }
     }
 
     public class CuePointEvent : MetaEvent
@@ -26,9 +36,25 @@ namespace MidiFileIO
         {
             this.cuePoint = cuePoint;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x07);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(cuePoint.Length));
+            bytes.AddRange(Encoding.ASCII.GetBytes(cuePoint));
+            return bytes.ToArray();
+        }
     }
 
-    public class EndOfTrackEvent : MetaEvent { }
+    public class EndOfTrackEvent : MetaEvent
+    {
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { 0xFF, 0x2F, 0x00 };
+        }
+    }
 
     public class InstrumentNameEvent : MetaEvent
     {
@@ -37,6 +63,16 @@ namespace MidiFileIO
         public InstrumentNameEvent(string instrumentName)
         {
             this.instrumentName = instrumentName;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x04);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(instrumentName.Length));
+            bytes.AddRange(Encoding.ASCII.GetBytes(instrumentName));
+            return bytes.ToArray();
         }
     }
 
@@ -50,6 +86,17 @@ namespace MidiFileIO
             this.sharpsFlats = sharpsFlats;
             this.majorMinor = majorMinor;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x59);
+            bytes.Add(0x02);
+            bytes.AddRange(BinaryUtils.IntToByteArr(sharpsFlats, 1));
+            bytes.AddRange(BinaryUtils.IntToByteArr(majorMinor, 1));
+            return bytes.ToArray();
+        }
     }
 
     public class LyricEvent : MetaEvent
@@ -59,6 +106,16 @@ namespace MidiFileIO
         public LyricEvent(string lyric)
         {
             this.lyric = lyric;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x05);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(lyric.Length));
+            bytes.AddRange(Encoding.ASCII.GetBytes(lyric));
+            return bytes.ToArray();
         }
     }
 
@@ -70,6 +127,16 @@ namespace MidiFileIO
         {
             this.marker = marker;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x06);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(marker.Length));
+            bytes.AddRange(Encoding.ASCII.GetBytes(marker));
+            return bytes.ToArray();
+        }
     }
 
     public class MidiChannelPrefixEvent : MetaEvent
@@ -79,6 +146,11 @@ namespace MidiFileIO
         public MidiChannelPrefixEvent(int channel)
         {
             this.channel = channel;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { 0xFF, 0x20, 0x01, BinaryUtils.IntToByteArr(channel, 1)[0] };
         }
     }
 
@@ -90,6 +162,16 @@ namespace MidiFileIO
         {
             this.sequenceNumber = sequenceNumber;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x00);
+            bytes.Add(0x02);
+            bytes.AddRange(BinaryUtils.IntToByteArr(sequenceNumber, 2));
+            return bytes.ToArray();
+        }
     }
 
     public class SequencerSpecificEvent : MetaEvent
@@ -100,6 +182,16 @@ namespace MidiFileIO
         {
             this.sequencerData = sequencerData;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x7F);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(sequencerData.Length));
+            bytes.AddRange(sequencerData);
+            return bytes.ToArray();
+        }
     }
 
     public class SetTempoEvent : MetaEvent
@@ -109,6 +201,16 @@ namespace MidiFileIO
         public SetTempoEvent(int tempo)
         {
             this.tempo = tempo;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x51);
+            bytes.Add(0x03);
+            bytes.AddRange(BinaryUtils.IntToByteArr(tempo, 3));
+            return bytes.ToArray();
         }
     }
 
@@ -128,6 +230,19 @@ namespace MidiFileIO
             this.frames = frames;
             this.fractionalFrame = fractionalFrame;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[]
+            {
+                0xFF, 0x54, 0x05,
+                (byte)hours,
+                (byte)minutes,
+                (byte)seconds,
+                (byte)frames,
+                (byte)fractionalFrame
+            };
+        }
     }
 
     public class TextEvent : MetaEvent
@@ -137,6 +252,16 @@ namespace MidiFileIO
         public TextEvent(byte[] text)
         {
             this.text = text;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x01);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(text.Length));
+            bytes.AddRange(text);
+            return bytes.ToArray();
         }
     }
 
@@ -157,6 +282,19 @@ namespace MidiFileIO
             this.clocksPerMetronomeTick = clocksPerMetronomeTick;
             this.thirtySecondNotesPerTwentyFourClocks = thirtySecondNotesPerTwentyFourClocks;
         }
+
+        public override byte[] ToByteArray()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x58);
+            bytes.Add(0x04);
+            bytes.AddRange(BinaryUtils.IntToByteArr(numerator, 1));
+            bytes.AddRange(BinaryUtils.IntToByteArr(denominator, 1));
+            bytes.AddRange(BinaryUtils.IntToByteArr(clocksPerMetronomeTick, 1));
+            bytes.AddRange(BinaryUtils.IntToByteArr(thirtySecondNotesPerTwentyFourClocks, 1));
+            return bytes.ToArray();
+        }
     }
 
     public class TrackNameEvent : MetaEvent
@@ -167,15 +305,15 @@ namespace MidiFileIO
         {
             this.trackName = trackName;
         }
-    }
 
-    public class UnknownMetaEvent : MetaEvent
-    {
-        public byte[] data;
-
-        public UnknownMetaEvent(byte[] data)
+        public override byte[] ToByteArray()
         {
-            this.data = data;
+            List<byte> bytes = new List<byte>();
+            bytes.Add(0xFF);
+            bytes.Add(0x03);
+            bytes.AddRange(BinaryUtils.IntToVariableByteArr(trackName.Length));
+            bytes.AddRange(Encoding.ASCII.GetBytes(trackName));
+            return bytes.ToArray();
         }
     }
 }

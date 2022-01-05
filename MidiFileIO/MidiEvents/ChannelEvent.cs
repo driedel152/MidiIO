@@ -19,6 +19,11 @@ namespace MidiFileIO
         {
             this.channel = channel;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x7B, 0x00 };
+        }
     }
 
     public class AllSoundOffEvent : ChannelModeEvent
@@ -26,6 +31,11 @@ namespace MidiFileIO
         public AllSoundOffEvent(int channel)
         {
             this.channel = channel;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x78, 0x00 };
         }
     }
 
@@ -38,6 +48,11 @@ namespace MidiFileIO
             this.channel = channel;
             this.connect = connect;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x78, (byte)(connect ? 0x7F : 0x00) };
+        }
     }
 
     public class MonoModeOnEvent : ChannelModeEvent
@@ -49,6 +64,11 @@ namespace MidiFileIO
             this.channel = channel;
             this.numChannels = numChannels;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x7E, BinaryUtils.IntToByteArr(numChannels, 1)[0] };
+        }
     }
 
     public class OmniModeOffEvent : ChannelModeEvent
@@ -56,6 +76,11 @@ namespace MidiFileIO
         public OmniModeOffEvent(int channel)
         {
             this.channel = channel;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x7C, 0x00 };
         }
     }
 
@@ -65,6 +90,11 @@ namespace MidiFileIO
         {
             this.channel = channel;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x7D, 0x00 };
+        }
     }
 
     public class PolyModeOnEvent : ChannelModeEvent
@@ -73,6 +103,11 @@ namespace MidiFileIO
         {
             this.channel = channel;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x7F, 0x00 };
+        }
     }
 
     public class ResetAllControllersEvent : ChannelModeEvent
@@ -80,6 +115,11 @@ namespace MidiFileIO
         public ResetAllControllersEvent(int channel)
         {
             this.channel = channel;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[3] { (byte)(0xB0 | channel), 0x79, 0x00 };
         }
     }
 
@@ -94,6 +134,11 @@ namespace MidiFileIO
             this.channel = channel;
             this.channelPressure = channelPressure;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0xD0 | channel), BinaryUtils.IntToByteArr(channelPressure, 1)[0] };
+        }
     }
 
     public class ControllerChangeEvent : ChannelVoiceEvent
@@ -106,6 +151,11 @@ namespace MidiFileIO
             this.channel = channel;
             this.controllerNumber = controllerNumber;
             this.controllerValue = controllerValue;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0xB0 | channel), BinaryUtils.IntToByteArr(controllerNumber, 1)[0], BinaryUtils.IntToByteArr(controllerValue, 1)[0] };
         }
     }
 
@@ -120,6 +170,11 @@ namespace MidiFileIO
             this.keyOff = keyOff;
             this.velocityOff = velocityOff;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0x80 | channel), BinaryUtils.IntToByteArr(keyOff, 1)[0], BinaryUtils.IntToByteArr(velocityOff, 1)[0] };
+        }
     }
 
     public class NoteOnEvent : ChannelVoiceEvent
@@ -132,6 +187,11 @@ namespace MidiFileIO
             this.channel = channel;
             this.keyOn = keyOn;
             this.velocityOn = velocityOn;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0x90 | channel), BinaryUtils.IntToByteArr(keyOn, 1)[0], BinaryUtils.IntToByteArr(velocityOn, 1)[0] };
         }
     }
 
@@ -146,6 +206,11 @@ namespace MidiFileIO
             this.lsb = lsb;
             this.msb = msb;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0xE0 | channel), BinaryUtils.IntToByteArr(lsb, 1)[0], BinaryUtils.IntToByteArr(msb, 1)[0] };
+        }
     }
 
     public class PolyphonicKeyPressureEvent : ChannelVoiceEvent
@@ -159,6 +224,11 @@ namespace MidiFileIO
             this.polyKey = polyKey;
             this.keyPressure = keyPressure;
         }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0xA0 | channel), BinaryUtils.IntToByteArr(polyKey, 1)[0], BinaryUtils.IntToByteArr(keyPressure, 1)[0] };
+        }
     }
 
     public class ProgramChangeEvent : ChannelVoiceEvent
@@ -169,6 +239,11 @@ namespace MidiFileIO
         {
             this.channel = channel;
             this.programName = programName;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            return new byte[] { (byte)(0xC0 | channel), BinaryUtils.IntToByteArr((int)programName, 1)[0] };
         }
     }
 }
