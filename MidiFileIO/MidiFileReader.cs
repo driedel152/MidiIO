@@ -11,6 +11,7 @@ namespace MidiFileIO
     {
         readonly byte[] raw;
         int index;
+        byte runningStatus;
 
         public MidiFileReader(string path)
         {
@@ -50,6 +51,7 @@ namespace MidiFileIO
             {
                 int deltaTime = BinaryUtils.ReadVariableLengthRawToInt(raw, ref index);
                 MidiEvent midiEvent = ReadMidiEvent();
+                Console.WriteLine(midiEvent);
                 midiEvent.deltaTime = deltaTime;
                 midiEvents.Add(midiEvent);
             }
@@ -64,7 +66,8 @@ namespace MidiFileIO
 
         private MidiEvent ReadMidiEvent()
         {
-            return MidiEvent.Parse(raw, ref index);
+            MidiEvent midiEvent = MidiEvent.Parse(raw, ref index, ref runningStatus);
+            return midiEvent;
         }
 
         private MidiFileHeader ReadHeaderChunk()

@@ -10,13 +10,15 @@ namespace MidiFileIO
         
         public abstract IEnumerable<byte> ToBytes();
 
-        public static MidiEvent Parse(byte[] raw, ref int index)
+        public static MidiEvent Parse(byte[] raw, ref int index, ref byte runningStatus)
         {
-            byte statusByte = raw[index++];
+            byte statusByte = raw[index] < 0x80 ? runningStatus : raw[index++];
+            runningStatus = statusByte;
+
             int length;
             switch (statusByte)
             {
-                // Sysex Events
+                // Sysex Events TODO: Add System Common Messages
                 case 0xF0:
                     length = BinaryUtils.ReadVariableLengthRawToInt(raw, ref index);
                     byte[] sysexData = BinaryUtils.ReadRawToByteArr(raw, ref index, length);

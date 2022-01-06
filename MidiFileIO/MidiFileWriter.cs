@@ -12,6 +12,7 @@ namespace MidiFileIO
     {
         MidiFile midiFile;
         FileStream file;
+        bool useRunningStatus;
 
         public MidiFileWriter(MidiFile midiFile, string path)
         {
@@ -19,8 +20,9 @@ namespace MidiFileIO
             file = new FileStream(path, FileMode.Create);
         }
 
-        public void WriteMidiFile()
+        public void WriteMidiFile(bool useRunningStatus = true)
         {
+            this.useRunningStatus = useRunningStatus;
             WriteHeaderChunk(midiFile);
 
             for (int i = 0; i < midiFile.tracks.Length; i++)
@@ -66,10 +68,24 @@ namespace MidiFileIO
         private byte[] TrackToByteArr(Track track)
         {
             List<byte> data = new List<byte>();
+            byte runningStatus = 0x00;
             foreach (MidiEvent e in track.events)
             {
                 data.AddRange(BinaryUtils.IntToVariableByteArr(e.deltaTime));
-                data.AddRange(e.ToBytes());
+                IEnumerable<byte> bytes = e.ToBytes();
+                if (useRunningStatus && e is ChannelEvent)
+                {
+                    foreach (byte b in bytes)
+                    {
+                        if (b == runningStatus) continue; // Skip status byte
+                        data.Add(b);
+                    }
+                }
+                else
+                {
+                    data.AddRange(bytes);
+                }
+                runningStatus = bytes.First();
             }
             return data.ToArray();
         }
