@@ -9,18 +9,23 @@ namespace ConsoleTestDriver
         {
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            MidiFileReader reader;
-            MidiFile midiFile;
-            MidiFileWriter writer;
+            MidiFileReader reader = new MidiFileReader("Movie_Themes_-_Back_to_the_Future.mid");
+            MidiFile midiFile = reader.ReadMidiFile();
 
-            for (int i = 0; i < 1000; i++)
+            Console.WriteLine("Format: " + midiFile.header.format);
+            foreach(Track t in midiFile.tracks)
             {
-                reader = new MidiFileReader("MyMidi.mid");
-                midiFile = reader.ReadMidiFile();
-
-                writer = new MidiFileWriter(midiFile, "MyOtherMidi.mid");
-                writer.WriteMidiFile();
+                foreach(MidiEvent e in t.events)
+                {
+                    if(e is UnknownMetaEvent)
+                    {
+                        Console.WriteLine("Unknown MetaEvent of type " + ((UnknownMetaEvent)e).type);
+                    }
+                }
             }
+
+            MidiFileWriter writer = new MidiFileWriter(midiFile, "MyOtherMidi.mid");
+            writer.WriteMidiFile(true);
 
             watch.Stop();
             Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");

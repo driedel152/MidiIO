@@ -292,4 +292,26 @@ namespace MidiFileIO
                 yield return b;
         }
     }
+
+    public class UnknownMetaEvent : MetaEvent
+    {
+        public byte type;
+        public byte[] unknownData;
+
+        public UnknownMetaEvent(byte type, byte[] unknownData)
+        {
+            this.type = type;
+            this.unknownData = unknownData;
+        }
+
+        public override IEnumerable<byte> ToBytes()
+        {
+            yield return 0xFF;
+            yield return type;
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(unknownData.Length))
+                yield return b;
+            foreach (byte b in unknownData)
+                yield return b;
+        }
+    }
 }

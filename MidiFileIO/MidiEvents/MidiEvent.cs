@@ -93,7 +93,8 @@ namespace MidiFileIO
                             byte[] sequencerData = BinaryUtils.ReadRawToByteArr(raw, ref index, length); // TODO: read Manufacturer's ID
                             return new SequencerSpecificEvent(sequencerData);
                         default:
-                            throw new InvalidDataException();
+                            byte[] unknownData = BinaryUtils.ReadRawToByteArr(raw, ref index, length);
+                            return new UnknownMetaEvent(type, unknownData);
 
                     }
                 // Channel Events

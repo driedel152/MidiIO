@@ -51,7 +51,6 @@ namespace MidiFileIO
             {
                 int deltaTime = BinaryUtils.ReadVariableLengthRawToInt(raw, ref index);
                 MidiEvent midiEvent = ReadMidiEvent();
-                Console.WriteLine(midiEvent);
                 midiEvent.deltaTime = deltaTime;
                 midiEvents.Add(midiEvent);
             }
