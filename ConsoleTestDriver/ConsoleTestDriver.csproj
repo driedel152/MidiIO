@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MidiFileIO\MidiIO.csproj" />
+    <ProjectReference Include="..\MidiIO\MidiIO.csproj" />
   </ItemGroup>
 
 </Project>
