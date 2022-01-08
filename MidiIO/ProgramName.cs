@@ -10,7 +10,7 @@ namespace MidiIO
     {
         // Piano
 
-        AcousticGrandPiano = 1,
+        AcousticGrandPiano = 0,
         BrightAcousticPiano,
         ElectricGrandPiano,
         HonkytonkPiano,
