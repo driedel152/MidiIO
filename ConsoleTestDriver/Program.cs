@@ -42,9 +42,7 @@ namespace ConsoleTestDriver
             e3.deltaTime = 0;
             MidiEvent e4 = new NoteOffEvent(0, 62, 40);
             e4.deltaTime = 5000;
-            MidiEvent e5 = new EndOfTrackEvent();
-            e5.deltaTime = 0;
-            MidiEvent[] events = new MidiEvent[] { e1, e2, e3, e4, e5 };
+            MidiEvent[] events = new MidiEvent[] { e1, e2, e3, e4 };
             Track track = new Track(events);
 
             MidiFileHeader header = new MidiFileHeader(MidiFileFormat.SingleTrack, 1, new DivisionPPQN(300));

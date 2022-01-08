@@ -184,9 +184,14 @@ namespace MidiIO
 
     public class EndOfTrackEvent : MetaEvent
     {
+        /// <summary>
+        /// The byte representation of the EndOfTrackEvent. This is the only MidiEvent with a static byte representation.
+        /// </summary>
+        internal static readonly byte[] BYTES = { 0xFF, 0x2F, 0x00 };
+
         public override IEnumerable<byte> ToBytes()
         {
-            return new byte[] { 0xFF, 0x2F, 0x00 };
+            return BYTES;
         }
     }
 

@@ -87,6 +87,14 @@ namespace MidiIO
                 }
                 runningStatus = bytes.First();
             }
+
+            // Required event
+            if(!(track.events[track.events.Length - 1] is EndOfTrackEvent))
+            {
+                data.Add(0x00);
+                data.AddRange(EndOfTrackEvent.BYTES);
+            }
+
             return data.ToArray();
         }
     }
