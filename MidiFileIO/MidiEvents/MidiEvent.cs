@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace MidiFileIO
+namespace MidiIO
 {
     public abstract class MidiEvent 
     {

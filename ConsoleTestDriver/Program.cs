@@ -1,4 +1,4 @@
-﻿using MidiFileIO;
+﻿using MidiIO;
 using System;
 
 namespace ConsoleTestDriver

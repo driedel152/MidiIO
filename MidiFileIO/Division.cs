@@ -1,4 +1,4 @@
-﻿namespace MidiFileIO
+﻿namespace MidiIO
 {
     public abstract class Division
     {

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiFileIO", "MidiFileIO\MidiFileIO.csproj", "{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MidiIO", "MidiFileIO\MidiIO.csproj", "{A3A663A8-8911-4BC0-B797-FEB3EDAE9D8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestDriver", "ConsoleTestDriver\ConsoleTestDriver.csproj", "{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTestDriver", "ConsoleTestDriver\ConsoleTestDriver.csproj", "{4B2A9A58-B27A-4F84-9C34-ADB1DEC963FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

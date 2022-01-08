@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MidiFileIO
+namespace MidiIO
 {
     public enum ProgramName
     {
