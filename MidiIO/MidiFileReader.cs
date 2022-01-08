@@ -55,10 +55,8 @@ namespace MidiIO
                 midiEvents.Add(midiEvent);
             }
 
-            if(index != endIndex)
-            {
-                Console.WriteLine("Not sure if that should happen...");
-            }
+            Debug.Assert(midiEvents[midiEvents.Count - 1] is EndOfTrackEvent);
+            Debug.Assert(index == endIndex);
 
             return new Track(midiEvents.ToArray());
         }
