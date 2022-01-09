@@ -13,7 +13,7 @@ namespace ConsoleTestDriver
             MidiFileReader reader = new MidiFileReader("Test_-_test1.mid");
             Sequence sequence = reader.ReadMidiFile();
 
-            Console.WriteLine("Format: " + sequence.format);
+            Console.WriteLine("Format: " + reader.fileFormat);
             Console.WriteLine("Division: " + ((DivisionPPQN)sequence.division).pulsesPerQuarterNote);
             Console.WriteLine("Track count: " + sequence.tracks.Count);
             foreach (Track t in sequence.tracks)
@@ -35,7 +35,7 @@ namespace ConsoleTestDriver
             }
 
             MidiFileWriter writer = new MidiFileWriter(sequence, "MyOtherMidi.mid");
-            writer.WriteMidiFile(true);
+            writer.WriteMidiFile(reader.fileFormat);
             
             watch.Stop();
             Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
@@ -66,7 +66,7 @@ namespace ConsoleTestDriver
                 e.AbsoluteTime += 10;
             }
 
-            return new Sequence(new List<Track>(new Track[] { track }), new DivisionPPQN(2), MidiFormat.SingleTrack);
+            return new Sequence(new List<Track>(new Track[] { track }), new DivisionPPQN(2));
         }
     }
 }

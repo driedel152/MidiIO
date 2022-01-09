@@ -9,6 +9,8 @@ namespace MidiIO
 
     public class MidiFileReader
     {
+        public MidiFormat fileFormat;
+
         readonly byte[] raw;
         int index;
         byte runningStatus;
@@ -24,6 +26,7 @@ namespace MidiIO
         {
             index = 0;
             MidiHeader header = ReadHeaderChunk();
+            fileFormat = header.format;
 
             Track[] tracks = new Track[trackCount];
             for(int i=0; i<trackCount; i++)
@@ -32,7 +35,7 @@ namespace MidiIO
             }
             Debug.Assert(index == raw.Length);
 
-            return new Sequence(new List<Track>(tracks), header.division, header.format);
+            return new Sequence(new List<Track>(tracks), header.division);
         }
 
         private Track ReadTrackChunk()

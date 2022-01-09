@@ -11,6 +11,7 @@ namespace MidiIO
     public class MidiFileWriter
     {
         Sequence sequence;
+        MidiFormat format;
         FileStream file;
         bool useRunningStatus;
 
@@ -20,14 +21,23 @@ namespace MidiIO
             file = new FileStream(path, FileMode.Create);
         }
 
-        public void WriteMidiFile(bool useRunningStatus = true)
+        public void WriteMidiFile(MidiFormat format, bool useRunningStatus = true)
         {
             this.useRunningStatus = useRunningStatus;
+            this.format = format;
             WriteHeaderChunk(sequence);
 
-            for (int i = 0; i < sequence.tracks.Count; i++)
+            if(format == MidiFormat.SingleTrack)
             {
-                WriteTrackChunk(sequence.tracks[i]);
+                // TODO: Merge tracks to a single track
+                WriteTrackChunk(sequence.tracks[0]);
+            }
+            else
+            {
+                for (int i = 0; i < sequence.tracks.Count; i++)
+                {
+                    WriteTrackChunk(sequence.tracks[i]);
+                }
             }
             file.Close();
         }
@@ -39,7 +49,7 @@ namespace MidiIO
             // Length
             file.Write(BinaryUtils.IntToByteArr(6, 4));
             // Data
-            file.Write(BinaryUtils.IntToByteArr((int)sequence.format, 2));
+            file.Write(BinaryUtils.IntToByteArr((int)format, 2));
             file.Write(BinaryUtils.IntToByteArr(sequence.tracks.Count, 2));
             byte[] divisionBytes;
             if (sequence.division is DivisionPPQN) // TODO: Enforce maximum values
@@ -101,7 +111,7 @@ namespace MidiIO
                 data.AddRange(EndOfTrackEvent.BYTES);
             }
 
-            return data;
+            return data.ToArray();
         }
     }
 }
