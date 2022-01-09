@@ -1,5 +1,6 @@
 ﻿using MidiIO;
 using System;
+using System.Collections.Generic;
 
 namespace ConsoleTestDriver
 {
@@ -9,11 +10,12 @@ namespace ConsoleTestDriver
         {
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            MidiFileReader reader = new MidiFileReader("Movie_Themes_-_Back_to_the_Future.mid");
-            MidiFile midiFile = CreateMidiFile();
+            MidiFileReader reader = new MidiFileReader("ABBA_-_Dancing_Queen.mid");
+            MidiFile midiFile = reader.ReadMidiFile();
 
             Console.WriteLine("Format: " + midiFile.header.format);
             Console.WriteLine("Division: " + ((DivisionPPQN)midiFile.header.division).pulsesPerQuarterNote);
+            Console.WriteLine("Track count: " + midiFile.tracks.Length);
             foreach (Track t in midiFile.tracks)
             {
                 foreach(MidiEvent e in t.events)
@@ -43,9 +45,9 @@ namespace ConsoleTestDriver
             MidiEvent e4 = new NoteOffEvent(0, 62, 40);
             e4.deltaTime = 5000;
             MidiEvent[] events = new MidiEvent[] { e1, e2, e3, e4 };
-            Track track = new Track(events);
+            Track track = new Track(new List<MidiEvent>(events));
 
-            MidiFileHeader header = new MidiFileHeader(MidiFileFormat.SingleTrack, 1, new DivisionPPQN(300));
+            MidiFileHeader header = new MidiFileHeader(MidiFileFormat.SingleTrack, 1, new DivisionPPQN(120));
 
             return new MidiFile(header, new Track[] { track });
         }

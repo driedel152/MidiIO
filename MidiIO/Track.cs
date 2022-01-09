@@ -8,9 +8,9 @@ namespace MidiIO
 {
     public class Track
     {
-        public MidiEvent[] events;
+        public List<MidiEvent> events;
 
-        public Track(MidiEvent[] events)
+        public Track(List<MidiEvent> events)
         {
             this.events = events;
         }

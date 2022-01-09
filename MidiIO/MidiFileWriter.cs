@@ -89,7 +89,7 @@ namespace MidiIO
             }
 
             // Required event
-            if(!(track.events[track.events.Length - 1] is EndOfTrackEvent))
+            if(!(track.events[track.events.Count - 1] is EndOfTrackEvent))
             {
                 data.Add(0x00);
                 data.AddRange(EndOfTrackEvent.BYTES);

@@ -58,7 +58,7 @@ namespace MidiIO
             Debug.Assert(midiEvents[midiEvents.Count - 1] is EndOfTrackEvent);
             Debug.Assert(index == endIndex);
 
-            return new Track(midiEvents.ToArray());
+            return new Track(midiEvents);
         }
 
         private MidiEvent ReadMidiEvent()
