@@ -67,11 +67,11 @@ namespace MidiIO
         }
     }
 
-    public class TrackNameEvent : MetaEvent
+    public class SequenceNameEvent : MetaEvent
     {
         public string trackName;
 
-        public TrackNameEvent(string trackName)
+        public SequenceNameEvent(string trackName)
         {
             this.trackName = trackName;
         }
