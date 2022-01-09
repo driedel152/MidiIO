@@ -12,6 +12,7 @@ namespace MidiIO
         readonly byte[] raw;
         int index;
         byte runningStatus;
+        int trackCount;
 
         public MidiFileReader(string path)
         {
@@ -23,8 +24,8 @@ namespace MidiIO
         {
             MidiHeader header = ReadHeaderChunk();
 
-            Track[] tracks = new Track[header.trackCount];
-            for(int i=0; i<header.trackCount; i++)
+            Track[] tracks = new Track[trackCount];
+            for(int i=0; i<trackCount; i++)
             {
                 tracks[i] = ReadTrackChunk();
             }
@@ -91,7 +92,7 @@ namespace MidiIO
             MidiFormat format = (MidiFormat)BinaryUtils.ReadRawToInt(raw, ref index, 2);
             length -= 2;
 
-            int trackCount = BinaryUtils.ReadRawToInt(raw, ref index, 2);
+            trackCount = BinaryUtils.ReadRawToInt(raw, ref index, 2);
             length -= 2;
 
             int divisionRaw = BinaryUtils.ReadRawToInt(raw, ref index, 2);
@@ -110,7 +111,7 @@ namespace MidiIO
             }
 
             byte[] ignoredData = BinaryUtils.ReadRawToByteArr(raw, ref index, length);
-            return new MidiHeader(format, trackCount, division, ignoredData);
+            return new MidiHeader(format, division, ignoredData);
         }
     }
 }

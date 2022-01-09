@@ -54,7 +54,7 @@ namespace ConsoleTestDriver
             MidiEvent[] events = new MidiEvent[] { e1, e2, e3, e4 };
             Track track = new Track(new List<MidiEvent>(events));
 
-            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, 1, new DivisionPPQN(120));
+            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, new DivisionPPQN(120));
 
             return new Sequence(header, new List<Track>(new Track[] { track }));
         }
