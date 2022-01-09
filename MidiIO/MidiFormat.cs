@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MidiIO
 {
-    public enum MidiFileFormat
+    public enum MidiFormat
     {
         /// <summary>
         /// The MIDI format that consists of a header-chunk and a single track-chunk.

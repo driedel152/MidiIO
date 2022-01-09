@@ -1,13 +1,13 @@
 ﻿namespace MidiIO
 {
-    public class MidiFileHeader
+    public class MidiHeader
     {
-        public MidiFileFormat format;
+        public MidiFormat format;
         internal int trackCount; // Used for reading, not writing
         public Division division;
         public byte[] ignoredData;
 
-        public MidiFileHeader(MidiFileFormat format, int trackCount, Division division, byte[] ignoredData = null)
+        public MidiHeader(MidiFormat format, int trackCount, Division division, byte[] ignoredData = null)
         {
             this.format = format;
             this.trackCount = trackCount;

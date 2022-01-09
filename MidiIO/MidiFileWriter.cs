@@ -10,47 +10,47 @@ namespace MidiIO
 {
     public class MidiFileWriter
     {
-        MidiFile midiFile;
+        Sequence sequence;
         FileStream file;
         bool useRunningStatus;
 
-        public MidiFileWriter(MidiFile midiFile, string path)
+        public MidiFileWriter(Sequence sequence, string path)
         {
-            this.midiFile = midiFile;
+            this.sequence = sequence;
             file = new FileStream(path, FileMode.Create);
         }
 
         public void WriteMidiFile(bool useRunningStatus = true)
         {
             this.useRunningStatus = useRunningStatus;
-            WriteHeaderChunk(midiFile);
+            WriteHeaderChunk(sequence);
 
-            for (int i = 0; i < midiFile.tracks.Length; i++)
+            for (int i = 0; i < sequence.tracks.Count; i++)
             {
-                WriteTrackChunk(midiFile.tracks[i]);
+                WriteTrackChunk(sequence.tracks[i]);
             }
             file.Close();
         }
 
-        private void WriteHeaderChunk(MidiFile midiFile)
+        private void WriteHeaderChunk(Sequence sequence)
         {
             // Chunk Type
             file.Write(Encoding.ASCII.GetBytes("MThd"));
             // Length
             file.Write(BinaryUtils.IntToByteArr(6, 4).ToArray());
             // Data
-            file.Write(BinaryUtils.IntToByteArr((int)midiFile.header.format, 2).ToArray());
-            file.Write(BinaryUtils.IntToByteArr(midiFile.tracks.Length, 2).ToArray());
+            file.Write(BinaryUtils.IntToByteArr((int)sequence.header.format, 2).ToArray());
+            file.Write(BinaryUtils.IntToByteArr(sequence.tracks.Count, 2).ToArray());
             byte[] divisionBytes;
-            if (midiFile.header.division is DivisionPPQN) // TODO: Enforce maximum values
+            if (sequence.header.division is DivisionPPQN) // TODO: Enforce maximum values
             {
-                DivisionPPQN division = (DivisionPPQN)midiFile.header.division;
+                DivisionPPQN division = (DivisionPPQN)sequence.header.division;
                 divisionBytes = BinaryUtils.IntToByteArr(division.pulsesPerQuarterNote, 2).ToArray();
                 divisionBytes[0] &= 0x7F;
             }
             else
             {
-                DivisionFrameBased division = (DivisionFrameBased)midiFile.header.division;
+                DivisionFrameBased division = (DivisionFrameBased)sequence.header.division;
                 divisionBytes = new byte[2] { (byte)(0x80 | division.framesPerSecond), (byte)division.deltaTimePerFrame };
             }
             file.Write(divisionBytes);

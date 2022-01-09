@@ -19,9 +19,9 @@ namespace MidiIO
             index = 0;
         }
 
-        public MidiFile ReadMidiFile()
+        public Sequence ReadMidiFile()
         {
-            MidiFileHeader header = ReadHeaderChunk();
+            MidiHeader header = ReadHeaderChunk();
 
             Track[] tracks = new Track[header.trackCount];
             for(int i=0; i<header.trackCount; i++)
@@ -30,7 +30,7 @@ namespace MidiIO
             }
             Debug.Assert(index == raw.Length);
 
-            return new MidiFile(header, tracks);
+            return new Sequence(header, new List<Track>(tracks));
         }
 
         private Track ReadTrackChunk()
@@ -69,7 +69,7 @@ namespace MidiIO
             return midiEvent;
         }
 
-        private MidiFileHeader ReadHeaderChunk()
+        private MidiHeader ReadHeaderChunk()
         {
             string chunkType = BinaryUtils.ReadRawToAsciiString(raw, ref index, 4);
             if (chunkType != "MThd")
@@ -86,9 +86,9 @@ namespace MidiIO
             return length;
         }
 
-        private MidiFileHeader ReadHeaderData(int length)
+        private MidiHeader ReadHeaderData(int length)
         {
-            MidiFileFormat format = (MidiFileFormat)BinaryUtils.ReadRawToInt(raw, ref index, 2);
+            MidiFormat format = (MidiFormat)BinaryUtils.ReadRawToInt(raw, ref index, 2);
             length -= 2;
 
             int trackCount = BinaryUtils.ReadRawToInt(raw, ref index, 2);
@@ -110,7 +110,7 @@ namespace MidiIO
             }
 
             byte[] ignoredData = BinaryUtils.ReadRawToByteArr(raw, ref index, length);
-            return new MidiFileHeader(format, trackCount, division, ignoredData);
+            return new MidiHeader(format, trackCount, division, ignoredData);
         }
     }
 }

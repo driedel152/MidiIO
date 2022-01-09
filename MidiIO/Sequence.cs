@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MidiIO
 {
-    public class MidiFile
+    public class Sequence
     {
-        public MidiFileHeader header;
-        public Track[] tracks;
+        public MidiHeader header;
+        public List<Track> tracks;
 
-        public MidiFile(MidiFileHeader header, Track[] tracks)
+        public Sequence(MidiHeader header, List<Track> tracks)
         {
             this.header = header;
             this.tracks = tracks;

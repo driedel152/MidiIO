@@ -11,12 +11,12 @@ namespace ConsoleTestDriver
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             MidiFileReader reader = new MidiFileReader("ABBA_-_Dancing_Queen.mid");
-            MidiFile midiFile = reader.ReadMidiFile();
+            Sequence sequence = reader.ReadMidiFile();
 
-            Console.WriteLine("Format: " + midiFile.header.format);
-            Console.WriteLine("Division: " + ((DivisionPPQN)midiFile.header.division).pulsesPerQuarterNote);
-            Console.WriteLine("Track count: " + midiFile.tracks.Length);
-            foreach (Track t in midiFile.tracks)
+            Console.WriteLine("Format: " + sequence.header.format);
+            Console.WriteLine("Division: " + ((DivisionPPQN)sequence.header.division).pulsesPerQuarterNote);
+            Console.WriteLine("Track count: " + sequence.tracks.Count);
+            foreach (Track t in sequence.tracks)
             {
                 foreach(MidiEvent e in t.events)
                 {
@@ -34,14 +34,14 @@ namespace ConsoleTestDriver
                 }
             }
 
-            MidiFileWriter writer = new MidiFileWriter(midiFile, "MyOtherMidi.mid");
+            MidiFileWriter writer = new MidiFileWriter(sequence, "MyOtherMidi.mid");
             writer.WriteMidiFile(true);
 
             watch.Stop();
             Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
         }
 
-        public static MidiFile CreateMidiFile()
+        public static Sequence CreateSequence()
         {
             MidiEvent e1 = new NoteOnEvent(0, 60, 40);
             e1.deltaTime = 0;
@@ -54,9 +54,9 @@ namespace ConsoleTestDriver
             MidiEvent[] events = new MidiEvent[] { e1, e2, e3, e4 };
             Track track = new Track(new List<MidiEvent>(events));
 
-            MidiFileHeader header = new MidiFileHeader(MidiFileFormat.SingleTrack, 1, new DivisionPPQN(120));
+            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, 1, new DivisionPPQN(120));
 
-            return new MidiFile(header, new Track[] { track });
+            return new Sequence(header, new List<Track>(new Track[] { track }));
         }
     }
 }
