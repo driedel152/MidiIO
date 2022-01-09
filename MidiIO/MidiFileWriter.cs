@@ -37,20 +37,20 @@ namespace MidiIO
             // Chunk Type
             file.Write(Encoding.ASCII.GetBytes("MThd"));
             // Length
-            file.Write(BinaryUtils.IntToByteArr(6, 4).ToArray());
+            file.Write(BinaryUtils.IntToByteArr(6, 4));
             // Data
-            file.Write(BinaryUtils.IntToByteArr((int)sequence.header.format, 2).ToArray());
-            file.Write(BinaryUtils.IntToByteArr(sequence.tracks.Count, 2).ToArray());
+            file.Write(BinaryUtils.IntToByteArr((int)sequence.format, 2));
+            file.Write(BinaryUtils.IntToByteArr(sequence.tracks.Count, 2));
             byte[] divisionBytes;
-            if (sequence.header.division is DivisionPPQN) // TODO: Enforce maximum values
+            if (sequence.division is DivisionPPQN) // TODO: Enforce maximum values
             {
-                DivisionPPQN division = (DivisionPPQN)sequence.header.division;
-                divisionBytes = BinaryUtils.IntToByteArr(division.pulsesPerQuarterNote, 2).ToArray();
+                DivisionPPQN division = (DivisionPPQN)sequence.division;
+                divisionBytes = BinaryUtils.IntToByteArr(division.pulsesPerQuarterNote, 2);
                 divisionBytes[0] &= 0x7F;
             }
             else
             {
-                DivisionFrameBased division = (DivisionFrameBased)sequence.header.division;
+                DivisionFrameBased division = (DivisionFrameBased)sequence.division;
                 divisionBytes = new byte[2] { (byte)(0x80 | division.framesPerSecond), (byte)division.deltaTimePerFrame };
             }
             file.Write(divisionBytes);
@@ -61,7 +61,7 @@ namespace MidiIO
             file.Write(Encoding.ASCII.GetBytes("MTrk"));
 
             byte[] trackData = TrackToByteArr(track);
-            file.Write(BinaryUtils.IntToByteArr(trackData.Length, 4).ToArray());
+            file.Write(BinaryUtils.IntToByteArr(trackData.Length, 4));
             file.Write(trackData);
         }
 
@@ -101,7 +101,7 @@ namespace MidiIO
                 data.AddRange(EndOfTrackEvent.BYTES);
             }
 
-            return data.ToArray();
+            return data;
         }
     }
 }

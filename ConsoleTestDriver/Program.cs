@@ -13,8 +13,8 @@ namespace ConsoleTestDriver
             MidiFileReader reader = new MidiFileReader("Test_-_test1.mid");
             Sequence sequence = reader.ReadMidiFile();
 
-            Console.WriteLine("Format: " + sequence.header.format);
-            Console.WriteLine("Division: " + ((DivisionPPQN)sequence.header.division).pulsesPerQuarterNote);
+            Console.WriteLine("Format: " + sequence.format);
+            Console.WriteLine("Division: " + ((DivisionPPQN)sequence.division).pulsesPerQuarterNote);
             Console.WriteLine("Track count: " + sequence.tracks.Count);
             foreach (Track t in sequence.tracks)
             {
@@ -66,9 +66,7 @@ namespace ConsoleTestDriver
                 e.AbsoluteTime += 10;
             }
 
-            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, new DivisionPPQN(2));
-
-            return new Sequence(header, new List<Track>(new Track[] { track }));
+            return new Sequence(new List<Track>(new Track[] { track }), new DivisionPPQN(2), MidiFormat.SingleTrack);
         }
     }
 }

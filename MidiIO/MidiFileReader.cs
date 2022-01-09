@@ -32,7 +32,7 @@ namespace MidiIO
             }
             Debug.Assert(index == raw.Length);
 
-            return new Sequence(header, new List<Track>(tracks));
+            return new Sequence(new List<Track>(tracks), header.division, header.format);
         }
 
         private Track ReadTrackChunk()

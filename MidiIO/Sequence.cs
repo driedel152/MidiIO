@@ -8,13 +8,15 @@ namespace MidiIO
 {
     public class Sequence
     {
-        public MidiHeader header;
+        public MidiFormat format;
+        public Division division;
         public List<Track> tracks;
 
-        public Sequence(MidiHeader header, List<Track> tracks)
+        public Sequence(List<Track> tracks, Division division, MidiFormat format)
         {
-            this.header = header;
             this.tracks = tracks;
+            this.division = division;
+            this.format = format;
         }
     }
 }

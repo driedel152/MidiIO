@@ -1,6 +1,6 @@
 ﻿namespace MidiIO
 {
-    public class MidiHeader
+    internal class MidiHeader
     {
         public MidiFormat format;
         public Division division;
