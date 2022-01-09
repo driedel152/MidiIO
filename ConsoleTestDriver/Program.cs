@@ -10,7 +10,7 @@ namespace ConsoleTestDriver
         {
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            MidiFileReader reader = new MidiFileReader("ABBA_-_Dancing_Queen.mid");
+            MidiFileReader reader = new MidiFileReader("Test_-_test1.mid");
             Sequence sequence = reader.ReadMidiFile();
 
             Console.WriteLine("Format: " + sequence.header.format);
@@ -18,16 +18,16 @@ namespace ConsoleTestDriver
             Console.WriteLine("Track count: " + sequence.tracks.Count);
             foreach (Track t in sequence.tracks)
             {
-                foreach(MidiEvent e in t.events)
+                foreach(MidiEvent e in t.GetEvents())
                 {
-                    if(e is TimeSignatureEvent)
+                    if (e is TimeSignatureEvent)
                     {
                         TimeSignatureEvent timeSignatureEvent = (TimeSignatureEvent)e;
                         Console.WriteLine($"Time Signature: {timeSignatureEvent.numerator}/{Math.Pow(2, timeSignatureEvent.denominator)}, " +
                             $"{timeSignatureEvent.clocksPerMetronomeTick} clocks per tick, " +
                             $"{timeSignatureEvent.thirtySecondNotesPerTwentyFourClocks} 32nd/24-clocks");
                     }
-                    if(e is UnknownMetaEvent)
+                    if (e is UnknownMetaEvent)
                     {
                         Console.WriteLine("Unknown MetaEvent of type " + ((UnknownMetaEvent)e).type);
                     }
@@ -36,27 +36,37 @@ namespace ConsoleTestDriver
 
             MidiFileWriter writer = new MidiFileWriter(sequence, "MyOtherMidi.mid");
             writer.WriteMidiFile(true);
-
+            
             watch.Stop();
             Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
         }
 
         public static Sequence CreateSequence()
         {
-            MidiEvent e0 = new SetTempoEvent(500000);
-            e0.absoluteTime = 0;
-            MidiEvent e1 = new NoteOnEvent(0, 60, 40);
-            e1.absoluteTime = 0;
-            MidiEvent e2 = new NoteOffEvent(0, 60, 40);
-            e2.absoluteTime = 192;
-            MidiEvent e3 = new NoteOnEvent(0, 62, 40);
-            e3.absoluteTime = 192;
-            MidiEvent e4 = new NoteOffEvent(0, 62, 40);
-            e4.absoluteTime = 192*2;
-            MidiEvent[] events = new MidiEvent[] { e0, e1, e2, e3, e4 };
-            Track track = new Track(new List<MidiEvent>(events));
+            Track track = new Track();
+            track.AddEvent(0, new SetTempoEvent(500000));
+            track.AddEvent(0, new NoteOnEvent(0, 60, 40));
+            track.AddEvent(1, new NoteOffEvent(0, 60, 40));
+            track.AddEvent(1, new NoteOnEvent(0, 62, 40));
+            track.AddEvent(2, new NoteOffEvent(0, 62, 40));
+            track.AddEvent(2, new NoteOnEvent(0, 63, 40));
+            track.AddEvent(3, new NoteOffEvent(0, 63, 40));
+            track.AddEvent(3, new NoteOnEvent(0, 65, 40));
+            track.AddEvent(4, new NoteOffEvent(0, 65, 40));
+            track.AddEvent(4, new NoteOnEvent(0, 62, 40));
+            track.AddEvent(6, new NoteOffEvent(0, 62, 40));
+            track.AddEvent(6, new NoteOnEvent(0, 58, 40));
+            track.AddEvent(7, new NoteOffEvent(0, 58, 40));
+            track.AddEvent(7, new NoteOnEvent(0, 60, 40));
+            track.AddEvent(9, new NoteOffEvent(0, 60, 40));
+            track.AddEvent(7, new NoteOnEvent(0, 63, 40));
+            track.AddEvent(9, new NoteOffEvent(0, 63, 40));
+            foreach (MidiEvent e in track.GetEvents(9))
+            {
+                e.AbsoluteTime += 10;
+            }
 
-            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, new DivisionPPQN(96));
+            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, new DivisionPPQN(2));
 
             return new Sequence(header, new List<Track>(new Track[] { track }));
         }

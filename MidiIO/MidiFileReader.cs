@@ -23,7 +23,6 @@ namespace MidiIO
         public Sequence ReadMidiFile()
         {
             index = 0;
-            absoluteTime = 0;
             MidiHeader header = ReadHeaderChunk();
 
             Track[] tracks = new Track[trackCount];
@@ -38,6 +37,7 @@ namespace MidiIO
 
         private Track ReadTrackChunk()
         {
+            absoluteTime = 0;
             string chunkType = BinaryUtils.ReadRawToAsciiString(raw, ref index, 4);
             if (chunkType != "MTrk")
             {
@@ -49,22 +49,23 @@ namespace MidiIO
 
         private Track ReadTrackData(int length)
         {
-            List<MidiEvent> midiEvents = new List<MidiEvent>();
+            Track track = new Track();
 
+            bool endsWithEndOfTrack = false;
             int endIndex = index + length;
             while(index < endIndex)
             {
                 int deltaTime = BinaryUtils.ReadVariableLengthRawToInt(raw, ref index);
                 absoluteTime += deltaTime;
                 MidiEvent midiEvent = ReadMidiEvent();
-                midiEvent.absoluteTime = absoluteTime;
-                midiEvents.Add(midiEvent);
+                track.AddEvent(absoluteTime, midiEvent);
+                endsWithEndOfTrack = midiEvent is EndOfTrackEvent;
             }
 
-            Debug.Assert(midiEvents[midiEvents.Count - 1] is EndOfTrackEvent);
+            Debug.Assert(endsWithEndOfTrack);
             Debug.Assert(index == endIndex);
 
-            return new Track(midiEvents);
+            return track;
         }
 
         private MidiEvent ReadMidiEvent()

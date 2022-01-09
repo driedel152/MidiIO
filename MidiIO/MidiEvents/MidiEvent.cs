@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -6,7 +7,19 @@ namespace MidiIO
 {
     public abstract class MidiEvent 
     {
-        public int absoluteTime = 0;
+        private int absoluteTime = 0;
+        public Action<MidiEvent, int> OnUpdateAbsoluteTime;
+        public int AbsoluteTime
+        {
+            get => absoluteTime;
+            set
+            {
+                int previousValue = absoluteTime;
+                absoluteTime = value;
+                if(absoluteTime != previousValue)
+                    OnUpdateAbsoluteTime?.Invoke(this, previousValue);
+            }
+        }
         
         public abstract IEnumerable<byte> ToBytes();
 

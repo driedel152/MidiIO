@@ -69,11 +69,13 @@ namespace MidiIO
         {
             List<byte> data = new List<byte>();
             byte runningStatus = 0x00;
+
+            bool endsWithEndOfTrack = false;
             int lastEventTime = 0;
-            foreach (MidiEvent e in track.events)
+            foreach (MidiEvent e in track.GetEvents())
             {
-                int deltaTime = e.absoluteTime - lastEventTime;
-                lastEventTime = e.absoluteTime;
+                int deltaTime = e.AbsoluteTime - lastEventTime;
+                lastEventTime = e.AbsoluteTime;
                 data.AddRange(BinaryUtils.IntToVariableByteArr(deltaTime));
                 IEnumerable<byte> bytes = e.ToBytes();
                 if (useRunningStatus && e is ChannelEvent)
@@ -89,12 +91,13 @@ namespace MidiIO
                     data.AddRange(bytes);
                 }
                 runningStatus = bytes.First();
+                endsWithEndOfTrack = e is EndOfTrackEvent;
             }
 
             // Required event
-            if(!(track.events[track.events.Count - 1] is EndOfTrackEvent))
+            if (!endsWithEndOfTrack)
             {
-                data.Add(0x00);
+                data.Add(0x00); // delta time
                 data.AddRange(EndOfTrackEvent.BYTES);
             }
 

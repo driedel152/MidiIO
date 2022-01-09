@@ -8,11 +8,44 @@ namespace MidiIO
 {
     public class Track
     {
-        public List<MidiEvent> events;
+        private SortedDictionary<int, List<MidiEvent>> events;
 
-        public Track(List<MidiEvent> events)
+        public Track()
         {
-            this.events = events;
+            events = new SortedDictionary<int, List<MidiEvent>>();
+        }
+
+        public IEnumerable<MidiEvent> GetEvents()
+        {
+            List<MidiEvent> allEvents = new List<MidiEvent>();
+            foreach(List<MidiEvent> list in events.Values)
+            {
+                allEvents.AddRange(list);
+            }
+            return allEvents;
+        }
+
+        public IEnumerable<MidiEvent> GetEvents(int absoluteTime)
+        {
+            return events[absoluteTime].ToArray();
+        }
+
+        public void AddEvent(int absoluteTime, MidiEvent midiEvent)
+        {
+            if (!events.ContainsKey(absoluteTime))
+            {
+                events.Add(absoluteTime, new List<MidiEvent>());
+            }
+
+            midiEvent.AbsoluteTime = absoluteTime;
+            midiEvent.OnUpdateAbsoluteTime += HandleUpdateAbsoluteTime;
+            events[absoluteTime].Add(midiEvent);
+        }
+
+        private void HandleUpdateAbsoluteTime(MidiEvent midiEvent, int previousValue)
+        {
+            events[previousValue].Remove(midiEvent);
+            AddEvent(midiEvent.AbsoluteTime, midiEvent);
         }
     }
 }
