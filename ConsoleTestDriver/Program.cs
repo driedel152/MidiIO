@@ -20,6 +20,13 @@ namespace ConsoleTestDriver
             {
                 foreach(MidiEvent e in t.events)
                 {
+                    if(e is TimeSignatureEvent)
+                    {
+                        TimeSignatureEvent timeSignatureEvent = (TimeSignatureEvent)e;
+                        Console.WriteLine($"Time Signature: {timeSignatureEvent.numerator}/{Math.Pow(2, timeSignatureEvent.denominator)}, " +
+                            $"{timeSignatureEvent.clocksPerMetronomeTick} clocks per tick, " +
+                            $"{timeSignatureEvent.thirtySecondNotesPerTwentyFourClocks} 32nd/24-clocks");
+                    }
                     if(e is UnknownMetaEvent)
                     {
                         Console.WriteLine("Unknown MetaEvent of type " + ((UnknownMetaEvent)e).type);

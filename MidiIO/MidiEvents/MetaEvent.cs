@@ -247,7 +247,7 @@ namespace MidiIO
         public int clocksPerMetronomeTick;
         public int thirtySecondNotesPerTwentyFourClocks;
 
-        public TimeSignatureEvent(int numerator, int denominator, int clocksPerMetronomeTick, int thirtySecondNotesPerTwentyFourClocks)
+        public TimeSignatureEvent(int numerator, int denominator, int clocksPerMetronomeTick = 24, int thirtySecondNotesPerTwentyFourClocks = 8)
         {
             this.numerator = numerator;
             this.denominator = denominator;

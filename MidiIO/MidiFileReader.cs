@@ -28,6 +28,8 @@ namespace MidiIO
             {
                 tracks[i] = ReadTrackChunk();
             }
+            Debug.Assert(index == raw.Length);
+
             return new MidiFile(header, tracks);
         }
 
