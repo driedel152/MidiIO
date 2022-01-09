@@ -69,9 +69,12 @@ namespace MidiIO
         {
             List<byte> data = new List<byte>();
             byte runningStatus = 0x00;
+            int lastEventTime = 0;
             foreach (MidiEvent e in track.events)
             {
-                data.AddRange(BinaryUtils.IntToVariableByteArr(e.deltaTime));
+                int deltaTime = e.absoluteTime - lastEventTime;
+                lastEventTime = e.absoluteTime;
+                data.AddRange(BinaryUtils.IntToVariableByteArr(deltaTime));
                 IEnumerable<byte> bytes = e.ToBytes();
                 if (useRunningStatus && e is ChannelEvent)
                 {

@@ -6,7 +6,7 @@ namespace MidiIO
 {
     public abstract class MidiEvent 
     {
-        public int deltaTime = 0;
+        public int absoluteTime = 0;
         
         public abstract IEnumerable<byte> ToBytes();
 

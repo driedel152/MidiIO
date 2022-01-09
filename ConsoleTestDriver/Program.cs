@@ -43,18 +43,20 @@ namespace ConsoleTestDriver
 
         public static Sequence CreateSequence()
         {
+            MidiEvent e0 = new SetTempoEvent(500000);
+            e0.absoluteTime = 0;
             MidiEvent e1 = new NoteOnEvent(0, 60, 40);
-            e1.deltaTime = 0;
+            e1.absoluteTime = 0;
             MidiEvent e2 = new NoteOffEvent(0, 60, 40);
-            e2.deltaTime = 1000;
+            e2.absoluteTime = 192;
             MidiEvent e3 = new NoteOnEvent(0, 62, 40);
-            e3.deltaTime = 0;
+            e3.absoluteTime = 192;
             MidiEvent e4 = new NoteOffEvent(0, 62, 40);
-            e4.deltaTime = 5000;
-            MidiEvent[] events = new MidiEvent[] { e1, e2, e3, e4 };
+            e4.absoluteTime = 192*2;
+            MidiEvent[] events = new MidiEvent[] { e0, e1, e2, e3, e4 };
             Track track = new Track(new List<MidiEvent>(events));
 
-            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, new DivisionPPQN(120));
+            MidiHeader header = new MidiHeader(MidiFormat.SingleTrack, new DivisionPPQN(96));
 
             return new Sequence(header, new List<Track>(new Track[] { track }));
         }

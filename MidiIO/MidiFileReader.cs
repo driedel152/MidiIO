@@ -13,15 +13,17 @@ namespace MidiIO
         int index;
         byte runningStatus;
         int trackCount;
+        int absoluteTime;
 
         public MidiFileReader(string path)
         {
             raw = File.ReadAllBytes(path);
-            index = 0;
         }
 
         public Sequence ReadMidiFile()
         {
+            index = 0;
+            absoluteTime = 0;
             MidiHeader header = ReadHeaderChunk();
 
             Track[] tracks = new Track[trackCount];
@@ -53,8 +55,9 @@ namespace MidiIO
             while(index < endIndex)
             {
                 int deltaTime = BinaryUtils.ReadVariableLengthRawToInt(raw, ref index);
+                absoluteTime += deltaTime;
                 MidiEvent midiEvent = ReadMidiEvent();
-                midiEvent.deltaTime = deltaTime;
+                midiEvent.absoluteTime = absoluteTime;
                 midiEvents.Add(midiEvent);
             }
 
