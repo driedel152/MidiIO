@@ -11,7 +11,7 @@ namespace ConsoleTestDriver
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             MidiFileReader reader = new MidiFileReader("Test_-_test1.mid");
-            Sequence sequence = CreateSequence();
+            Sequence sequence = reader.ReadMidiFile();
 
             Console.WriteLine("Format: " + reader.fileFormat);
             Console.WriteLine("Division: " + ((DivisionPPQN)sequence.division).pulsesPerQuarterNote);

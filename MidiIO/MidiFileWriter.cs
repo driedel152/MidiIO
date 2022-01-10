@@ -45,12 +45,12 @@ namespace MidiIO
         private void WriteHeaderChunk(Sequence sequence)
         {
             // Chunk Type
-            file.Write(Encoding.ASCII.GetBytes("MThd"));
+            file.Write(Encoding.ASCII.GetBytes("MThd"), 0, 4);
             // Length
-            file.Write(BinaryUtils.IntToByteArr(6, 4));
+            file.Write(BinaryUtils.IntToByteArr(6, 4), 0, 4);
             // Data
-            file.Write(BinaryUtils.IntToByteArr((int)format, 2));
-            file.Write(BinaryUtils.IntToByteArr(sequence.Tracks.Count, 2));
+            file.Write(BinaryUtils.IntToByteArr((int)format, 2), 0, 2);
+            file.Write(BinaryUtils.IntToByteArr(sequence.Tracks.Count, 2), 0, 2);
             byte[] divisionBytes;
             if (sequence.division is DivisionPPQN) // TODO: Enforce maximum values
             {
@@ -63,16 +63,16 @@ namespace MidiIO
                 DivisionFrameBased division = (DivisionFrameBased)sequence.division;
                 divisionBytes = new byte[2] { (byte)(0x80 | division.framesPerSecond), (byte)division.deltaTimePerFrame };
             }
-            file.Write(divisionBytes);
+            file.Write(divisionBytes, 0, divisionBytes.Length);
         }
 
         private void WriteTrackChunk(Track track)
         {
-            file.Write(Encoding.ASCII.GetBytes("MTrk"));
+            file.Write(Encoding.ASCII.GetBytes("MTrk"), 0, 4);
 
             byte[] trackData = TrackToByteArr(track);
-            file.Write(BinaryUtils.IntToByteArr(trackData.Length, 4));
-            file.Write(trackData);
+            file.Write(BinaryUtils.IntToByteArr(trackData.Length, 4), 0, 4);
+            file.Write(trackData, 0, trackData.Length);
         }
 
         private byte[] TrackToByteArr(Track track)
