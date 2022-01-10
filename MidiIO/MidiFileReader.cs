@@ -28,14 +28,14 @@ namespace MidiIO
             MidiHeader header = ReadHeaderChunk();
             fileFormat = header.format;
 
-            Track[] tracks = new Track[trackCount];
+            Sequence sequence = new Sequence(header.division);
             for(int i=0; i<trackCount; i++)
             {
-                tracks[i] = ReadTrackChunk();
+                sequence.AddTrack(ReadTrackChunk());
             }
             Debug.Assert(index == raw.Length);
 
-            return new Sequence(new List<Track>(tracks), header.division);
+            return sequence;
         }
 
         private Track ReadTrackChunk()
@@ -61,7 +61,7 @@ namespace MidiIO
                 int deltaTime = BinaryUtils.ReadVariableLengthRawToInt(raw, ref index);
                 absoluteTime += deltaTime;
                 MidiEvent midiEvent = ReadMidiEvent();
-                track.AddEvent(absoluteTime, midiEvent);
+                track.AddEventAbsolute(midiEvent, absoluteTime);
                 endsWithEndOfTrack = midiEvent is EndOfTrackEvent;
             }
 

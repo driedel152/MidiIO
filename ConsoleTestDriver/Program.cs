@@ -11,12 +11,12 @@ namespace ConsoleTestDriver
             var watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             MidiFileReader reader = new MidiFileReader("Test_-_test1.mid");
-            Sequence sequence = reader.ReadMidiFile();
+            Sequence sequence = CreateSequence();
 
             Console.WriteLine("Format: " + reader.fileFormat);
             Console.WriteLine("Division: " + ((DivisionPPQN)sequence.division).pulsesPerQuarterNote);
-            Console.WriteLine("Track count: " + sequence.tracks.Count);
-            foreach (Track t in sequence.tracks)
+            Console.WriteLine("Track count: " + sequence.Tracks.Count);
+            foreach (Track t in sequence.Tracks)
             {
                 foreach(MidiEvent e in t.GetEvents())
                 {
@@ -43,30 +43,31 @@ namespace ConsoleTestDriver
 
         public static Sequence CreateSequence()
         {
-            Track track = new Track();
-            track.AddEvent(0, new SetTempoEvent(500000));
-            track.AddEvent(0, new NoteOnEvent(0, 60, 40));
-            track.AddEvent(1, new NoteOffEvent(0, 60, 40));
-            track.AddEvent(1, new NoteOnEvent(0, 62, 40));
-            track.AddEvent(2, new NoteOffEvent(0, 62, 40));
-            track.AddEvent(2, new NoteOnEvent(0, 63, 40));
-            track.AddEvent(3, new NoteOffEvent(0, 63, 40));
-            track.AddEvent(3, new NoteOnEvent(0, 65, 40));
-            track.AddEvent(4, new NoteOffEvent(0, 65, 40));
-            track.AddEvent(4, new NoteOnEvent(0, 62, 40));
-            track.AddEvent(6, new NoteOffEvent(0, 62, 40));
-            track.AddEvent(6, new NoteOnEvent(0, 58, 40));
-            track.AddEvent(7, new NoteOffEvent(0, 58, 40));
-            track.AddEvent(7, new NoteOnEvent(0, 60, 40));
-            track.AddEvent(9, new NoteOffEvent(0, 60, 40));
-            track.AddEvent(7, new NoteOnEvent(0, 63, 40));
-            track.AddEvent(9, new NoteOffEvent(0, 63, 40));
-            foreach (MidiEvent e in track.GetEvents(9))
+            Sequence sequence = new Sequence(new DivisionPPQN(96));
+            sequence.AddTrack(new Track());
+            sequence.Tracks[0].AddEvent(new SetTempoEvent(500000), 0f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 60, 40), 0f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 60, 40), 0.5f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 62, 40), 0.5f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 62, 40), 1f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 63, 40), 1f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 63, 40), 1.5f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 65, 40), 1.5f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 65, 40), 2f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 62, 40), 2f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 62, 40), 3f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 58, 40), 3f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 58, 40), 3.5f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 60, 40), 3.5f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 60, 40), 4.5f);
+            sequence.Tracks[0].AddEvent(new NoteOnEvent(0, 63, 40), 3.5f);
+            sequence.Tracks[0].AddEvent(new NoteOffEvent(0, 63, 40), 4.5f);
+            foreach (MidiEvent e in sequence.Tracks[0].GetEvents(4.5f))
             {
-                e.AbsoluteTime += 10;
+                e.AbsoluteTime += sequence.division.BeatsToAbsolute(5);
             }
 
-            return new Sequence(new List<Track>(new Track[] { track }), new DivisionPPQN(2));
+            return sequence;
         }
     }
 }

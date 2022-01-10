@@ -8,6 +8,10 @@ namespace MidiIO
 {
     public class Track
     {
+        /// <summary>
+        /// The Sequence that contains this Track. This value is assigned when the Track is added to a Sequence.
+        /// </summary>
+        internal Sequence parentSequence;
         private SortedDictionary<int, List<MidiEvent>> events;
 
         public Track()
@@ -25,12 +29,24 @@ namespace MidiIO
             return allEvents;
         }
 
-        public IEnumerable<MidiEvent> GetEvents(int absoluteTime)
+        public IEnumerable<MidiEvent> GetEventsAbsolute(int absoluteTime)
         {
-            return events[absoluteTime].ToArray();
+            if (events.ContainsKey(absoluteTime))
+            {
+                return events[absoluteTime].ToArray();
+            }
+            else
+            {
+                return new MidiEvent[] { };
+            }
         }
 
-        public void AddEvent(int absoluteTime, MidiEvent midiEvent)
+        public IEnumerable<MidiEvent> GetEvents(float beat)
+        {
+            return GetEventsAbsolute(parentSequence.division.BeatsToAbsolute(beat));
+        }
+
+        public void AddEventAbsolute(MidiEvent midiEvent, int absoluteTime)
         {
             if (!events.ContainsKey(absoluteTime))
             {
@@ -42,10 +58,22 @@ namespace MidiIO
             events[absoluteTime].Add(midiEvent);
         }
 
+        public void AddEvent(MidiEvent midiEvent, float beat)
+        {
+            if (parentSequence?.division != null)
+            {
+                AddEventAbsolute(midiEvent, parentSequence.division.BeatsToAbsolute(beat));
+            }
+            else
+            {
+                throw new InvalidOperationException("The Track is not owned by a Sequence with a defined Division!");
+            }
+        }
+
         private void HandleUpdateAbsoluteTime(MidiEvent midiEvent, int previousValue)
         {
             events[previousValue].Remove(midiEvent);
-            AddEvent(midiEvent.AbsoluteTime, midiEvent);
+            AddEventAbsolute(midiEvent, midiEvent.AbsoluteTime);
         }
     }
 }

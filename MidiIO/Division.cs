@@ -1,8 +1,13 @@
 ﻿namespace MidiIO
 {
-    public abstract class Division
+    public abstract class Division 
     {
-        protected DivisionFormat format;
+        /// <summary>
+        /// Converts number of quarter note beats to the absolute time in a sequence.
+        /// </summary>
+        /// <param name="beats"></param>
+        /// <returns></returns>
+        public abstract int BeatsToAbsolute(float beats);
     }
 
     public class DivisionPPQN : Division
@@ -11,8 +16,12 @@
 
         public DivisionPPQN(int pulsesPerQuarterNote)
         {
-            format = DivisionFormat.PPQN;
             this.pulsesPerQuarterNote = pulsesPerQuarterNote;
+        }
+
+        public override int BeatsToAbsolute(float beats)
+        {
+            return (int)(beats * pulsesPerQuarterNote);
         }
     }
 
@@ -26,17 +35,10 @@
             this.deltaTimePerFrame = deltaTimePerFrame;
             this.framesPerSecond = framesPerSecond;
         }
-    }
 
-    public enum DivisionFormat
-    {
-        /// <summary>
-        /// Division format that specifies the number of delta-time units in each a quarter-note (Pulses Per Quarter Note).
-        /// </summary>
-        PPQN = 0,
-        /// <summary>
-        /// Division format that specifies the delta-time units per SMTPE frame and SMTPE frames per second.
-        /// </summary>
-        FrameBased = 1,
+        public override int BeatsToAbsolute(float beats)
+        {
+            throw new System.NotImplementedException("Frame based division format is not supported");
+        }
     }
 }

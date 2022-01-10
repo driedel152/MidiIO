@@ -30,13 +30,13 @@ namespace MidiIO
             if(format == MidiFormat.SingleTrack)
             {
                 // TODO: Merge tracks to a single track
-                WriteTrackChunk(sequence.tracks[0]);
+                WriteTrackChunk(sequence.Tracks[0]);
             }
             else
             {
-                for (int i = 0; i < sequence.tracks.Count; i++)
+                for (int i = 0; i < sequence.Tracks.Count; i++)
                 {
-                    WriteTrackChunk(sequence.tracks[i]);
+                    WriteTrackChunk(sequence.Tracks[i]);
                 }
             }
             file.Close();
@@ -50,7 +50,7 @@ namespace MidiIO
             file.Write(BinaryUtils.IntToByteArr(6, 4));
             // Data
             file.Write(BinaryUtils.IntToByteArr((int)format, 2));
-            file.Write(BinaryUtils.IntToByteArr(sequence.tracks.Count, 2));
+            file.Write(BinaryUtils.IntToByteArr(sequence.Tracks.Count, 2));
             byte[] divisionBytes;
             if (sequence.division is DivisionPPQN) // TODO: Enforce maximum values
             {

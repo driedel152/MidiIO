@@ -9,6 +9,9 @@ namespace MidiIO
     {
         private int absoluteTime = 0;
         public Action<MidiEvent, int> OnUpdateAbsoluteTime;
+        /// <summary>
+        /// The number of ticks from the beginning of the Sequence.
+        /// </summary>
         public int AbsoluteTime
         {
             get => absoluteTime;
