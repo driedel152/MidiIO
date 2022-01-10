@@ -69,20 +69,20 @@ namespace MidiIO
 
     public class SequenceNameEvent : MetaEvent
     {
-        public string trackName;
+        public string sequenceName;
 
-        public SequenceNameEvent(string trackName)
+        public SequenceNameEvent(string sequenceName)
         {
-            this.trackName = trackName;
+            this.sequenceName = sequenceName;
         }
 
         public override IEnumerable<byte> ToBytes()
         {
             yield return 0xFF;
             yield return 0x03;
-            foreach (byte b in BinaryUtils.IntToVariableByteArr(trackName.Length))
+            foreach (byte b in BinaryUtils.IntToVariableByteArr(sequenceName.Length))
                 yield return b;
-            foreach (byte b in Encoding.ASCII.GetBytes(trackName))
+            foreach (byte b in Encoding.ASCII.GetBytes(sequenceName))
                 yield return b;
         }
     }
@@ -244,20 +244,20 @@ namespace MidiIO
         /// Expressed as a power of 2.
         /// </summary>
         public int denominator;
-        public int clocksPerMetronomeTick;
-        public int thirtySecondNotesPerTwentyFourClocks;
+        public int clocksPerTick;
+        public int thirtySecondsPerTick;
 
-        public TimeSignatureEvent(int numerator, int denominator, int clocksPerMetronomeTick = 24, int thirtySecondNotesPerTwentyFourClocks = 8)
+        public TimeSignatureEvent(int numerator, int denominator, int clocksPerTick = 24, int thirtySecondsPerTick = 8)
         {
             this.numerator = numerator;
             this.denominator = denominator;
-            this.clocksPerMetronomeTick = clocksPerMetronomeTick;
-            this.thirtySecondNotesPerTwentyFourClocks = thirtySecondNotesPerTwentyFourClocks;
+            this.clocksPerTick = clocksPerTick;
+            this.thirtySecondsPerTick = thirtySecondsPerTick;
         }
 
         public override IEnumerable<byte> ToBytes()
         {
-            return new byte[] { 0xFF, 0x58, 0x04, (byte)numerator, (byte)denominator, (byte)clocksPerMetronomeTick, (byte)thirtySecondNotesPerTwentyFourClocks };
+            return new byte[] { 0xFF, 0x58, 0x04, (byte)numerator, (byte)denominator, (byte)clocksPerTick, (byte)thirtySecondsPerTick };
         }
     }
 

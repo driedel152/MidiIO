@@ -60,8 +60,8 @@ namespace MidiIO
                             string copyright = BinaryUtils.ReadRawToAsciiString(raw, ref index, length);
                             return new CopyrightNoticeEvent(copyright);
                         case 0x03:
-                            string trackName = BinaryUtils.ReadRawToAsciiString(raw, ref index, length);
-                            return new SequenceNameEvent(trackName);
+                            string sequenceName = BinaryUtils.ReadRawToAsciiString(raw, ref index, length);
+                            return new SequenceNameEvent(sequenceName);
                         case 0x04:
                             string instrumentName = BinaryUtils.ReadRawToAsciiString(raw, ref index, length);
                             return new InstrumentNameEvent(instrumentName);

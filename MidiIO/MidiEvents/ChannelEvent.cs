@@ -16,55 +16,55 @@ namespace MidiIO
 
     public class NoteOffEvent : ChannelVoiceEvent
     {
-        public int keyOff;
-        public int velocityOff;
+        public int key;
+        public int velocity;
 
-        public NoteOffEvent(int channel, int keyOff, int velocityOff)
+        public NoteOffEvent(int channel, int key, int velocity)
         {
             this.channel = channel;
-            this.keyOff = keyOff;
-            this.velocityOff = velocityOff;
+            this.key = key;
+            this.velocity = velocity;
         }
 
         public override IEnumerable<byte> ToBytes()
         {
-            return new byte[] { (byte)(0x80 | channel), (byte)keyOff, (byte)velocityOff };
+            return new byte[] { (byte)(0x80 | channel), (byte)key, (byte)velocity };
         }
     }
 
     public class NoteOnEvent : ChannelVoiceEvent
     {
-        public int keyOn;
-        public int velocityOn;
+        public int key;
+        public int velocity;
 
-        public NoteOnEvent(int channel, int keyOn, int velocityOn)
+        public NoteOnEvent(int channel, int key, int velocity)
         {
             this.channel = channel;
-            this.keyOn = keyOn;
-            this.velocityOn = velocityOn;
+            this.key = key;
+            this.velocity = velocity;
         }
 
         public override IEnumerable<byte> ToBytes()
         {
-            return new byte[] { (byte)(0x90 | channel), (byte)keyOn, (byte)velocityOn };
+            return new byte[] { (byte)(0x90 | channel), (byte)key, (byte)velocity };
         }
     }
 
     public class PolyphonicKeyPressureEvent : ChannelVoiceEvent
     {
-        public int polyKey;
-        public int keyPressure;
+        public int key;
+        public int pressure;
 
-        public PolyphonicKeyPressureEvent(int channel, int polyKey, int keyPressure)
+        public PolyphonicKeyPressureEvent(int channel, int key, int pressure)
         {
             this.channel = channel;
-            this.polyKey = polyKey;
-            this.keyPressure = keyPressure;
+            this.key = key;
+            this.pressure = pressure;
         }
 
         public override IEnumerable<byte> ToBytes()
         {
-            return new byte[] { (byte)(0xA0 | channel), (byte)polyKey, (byte)keyPressure };
+            return new byte[] { (byte)(0xA0 | channel), (byte)key, (byte)pressure };
         }
     }
 

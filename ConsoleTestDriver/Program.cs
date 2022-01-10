@@ -24,8 +24,8 @@ namespace ConsoleTestDriver
                     {
                         TimeSignatureEvent timeSignatureEvent = (TimeSignatureEvent)e;
                         Console.WriteLine($"Time Signature: {timeSignatureEvent.numerator}/{Math.Pow(2, timeSignatureEvent.denominator)}, " +
-                            $"{timeSignatureEvent.clocksPerMetronomeTick} clocks per tick, " +
-                            $"{timeSignatureEvent.thirtySecondNotesPerTwentyFourClocks} 32nd/24-clocks");
+                            $"{timeSignatureEvent.clocksPerTick} clocks per tick, " +
+                            $"{timeSignatureEvent.thirtySecondsPerTick} 32nd/24-clocks");
                     }
                     if (e is UnknownMetaEvent)
                     {
