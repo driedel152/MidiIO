@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Daniel Riedel</Authors>
+    <PackageId>driedel152.MidiIO</PackageId>
+    <Description>A C# library for Midi file reading and writing.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>Midi, Files</PackageTags>
+    <Product>MidiIO</Product>
+    <RepositoryUrl>https://github.com/driedel152/MidiIO</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
