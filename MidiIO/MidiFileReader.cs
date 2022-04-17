@@ -17,6 +17,10 @@ namespace MidiIO
         int trackCount;
         int absoluteTime;
 
+        /// <summary>
+        /// Initializes a new MidiFileReader for the file at the given path.
+        /// </summary>
+        /// <param name="path"></param>
         public MidiFileReader(string path)
         {
             raw = File.ReadAllBytes(path);
